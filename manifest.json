@@ -1,0 +1,30 @@
+{
+    "name": "Price Checcer",
+    "description" : "Makes shopping easier",
+    "version": "1.0",
+    "manifest_version": 2,
+
+    "permissions": [
+      "tabs",
+      "activeTab",
+      "webNavigation",
+      "http://localhost:5000/*"
+    ],
+
+    "web_accessible_resources": [
+        "retailers-popup.html",
+        "iframe.html"
+    ],
+
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+
+    "content_scripts": [
+      {
+        "matches": ["https://www.amazon.com/*"],
+        "js": ["content_script.js"]
+      }
+    ]
+}
