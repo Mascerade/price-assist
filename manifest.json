@@ -8,23 +8,27 @@
       "tabs",
       "activeTab",
       "webNavigation",
-      "http://localhost:5000/*"
+      "<all_urls>"
     ],
 
     "web_accessible_resources": [
         "retailers-popup.html",
-        "iframe.html"
+        "iframe.html",
+        "Bootstrap-CSS/bootstrap.min.css",
+        "retailers-popup.css",
+        "jquery.js",
+        "json5.min.js"
     ],
 
     "background": {
-      "scripts": ["background.js"],
+      "scripts": ["background.js", "json5.min.js"],
       "persistent": false
     },
 
     "content_scripts": [
       {
         "matches": ["https://www.amazon.com/*"],
-        "js": ["content_script.js"]
+        "js": ["content_script.js", "jquery.js", "json5.min.js"]
       }
     ]
 }
