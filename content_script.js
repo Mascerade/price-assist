@@ -36,16 +36,20 @@ chrome.runtime.onMessage.addListener(
 
                 
                 for(const [key, value] of Object.entries(request.data)) {
-                    if(value != "Could not find price" || value != '') {
-                        name = key.split("_")[0].charAt(0).toUpperCase() + key.split("_")[0].slice(1);
-                        data += addCard(name, value, "Could not find", value);    
-                        console.log("got here");
+                    if(key == "amazon_data") {
+                        data += addCard("Amazon", value, "#")
+                    }
+                    else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price") {
+                        
+                    }
+                    else {
+                        data += addCard(value[0], value[1], value[2])
                     }
                 }
                 data += "</div>";
 
-                iframe.style.cssText = "height: 500px; width: 325px; border: none; border-radius: 5px";
-                iframe_wrapper.style.cssText = "border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 325; z-index: 100000000; box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2); border: none; position: absolute; top: 150px; right: 70px;"
+                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px";
+                iframe_wrapper.style.cssText = "border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2); border: none; position: absolute; top: 150px; right: 70px;"
                 iframe_wrapper.appendChild(iframe)
                 document.body.appendChild(iframe_wrapper);
                 $("iframe").contents().find("head").html("<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/jvizvi2uqaopm79/bootstrap.min.css?dl=0'>")
@@ -60,16 +64,14 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-function addCard(name, price, shipping, total) {
+function addCard(name, price, link) {
     card = `
         <div id="card" class="card mb-3" style="max-width: 325px;">
             <div class="card-body">
                 <h4 id="retailer" class="card-title">` + name +`</h4>
                 <p id="base-price" class="card-text">Base Price: ` + price + `</p>
-                <p id="shipping" class="card-text">Shipping: ` + shipping + `</p>
-                <p id="total" class="card-text">Total Cost: ` + total + `</p> 
             </div>
-            <button id="link-button" type="button" class="btn btn-primary">Link!</button>
+            <a href="` + link + `" id="link-button" class="btn btn-primary">Link!</a>
         </div>
     `
     return card
