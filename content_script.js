@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(
                     if(key == "amazon_data") {
                         data += addCard("Amazon", value, "#")
                     }
-                    else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price") {
+                    else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price" || value[1] == "undefined") {
                         
                     }
                     else {
@@ -49,9 +49,10 @@ chrome.runtime.onMessage.addListener(
                 data += "</div>";
 
                 iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px";
-                iframe_wrapper.style.cssText = "border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2); border: none; position: absolute; top: 150px; right: 70px;"
+                iframe_wrapper.style.cssText = "border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;"
                 iframe_wrapper.appendChild(iframe)
-                document.body.appendChild(iframe_wrapper);
+                // document.body.appendChild(iframe_wrapper);
+                document.getElementById("leftCol").appendChild(iframe_wrapper)
                 $("iframe").contents().find("head").html("<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/jvizvi2uqaopm79/bootstrap.min.css?dl=0'>")
                 myFrame = $("iframe").contents().find("body");
                 myFrame.html(data);
@@ -71,7 +72,7 @@ function addCard(name, price, link) {
                 <h4 id="retailer" class="card-title">` + name +`</h4>
                 <p id="base-price" class="card-text">Base Price: ` + price + `</p>
             </div>
-            <a href="` + link + `" id="link-button" class="btn btn-primary">Link!</a>
+            <a href="` + link + `" id="link-button" class="btn btn-primary" target="_blank">Link!</a>
         </div>
     `
     return card
