@@ -48,12 +48,12 @@ chrome.runtime.onMessage.addListener(
                 }
                 data += "</div>";
 
-                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px";
+                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px; margin-left: 25%;";
                 iframe_wrapper.style.cssText = "border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;"
                 iframe_wrapper.appendChild(iframe)
                 // document.body.appendChild(iframe_wrapper);
                 document.getElementById("leftCol").appendChild(iframe_wrapper)
-                $("iframe").contents().find("head").html("<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/jvizvi2uqaopm79/bootstrap.min.css?dl=0'>")
+                $("iframe").contents().find("head").html("<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/snlfm9vr3j6bbj5/bootstrap-flatly.min.css?dl=0'>")
                 myFrame = $("iframe").contents().find("body");
                 myFrame.html(data);
                 console.log(data);

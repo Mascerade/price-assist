@@ -12,10 +12,6 @@
     ],
 
     "web_accessible_resources": [
-        "retailers-popup.html",
-        "iframe.html",
-        "Bootstrap-CSS/bootstrap.min.css",
-        "retailers-popup.css",
         "jquery.js",
         "json5.min.js"
     ],
