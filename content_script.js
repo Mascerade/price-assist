@@ -39,9 +39,15 @@ chrome.runtime.onMessage.addListener(
                     if(key == "amazon_data") {
                         data += addCard("Amazon", value, "#")
                     }
+
                     else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price" || value[1] == "undefined") {
                         
                     }
+
+                    else if(value == undefined || value.length == 0) {
+                        
+                    }
+
                     else {
                         data += addCard(value[0], value[1], value[2])
                     }
