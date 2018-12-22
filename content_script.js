@@ -25,7 +25,10 @@ chrome.runtime.onMessage.addListener(
                 var iframe_wrapper = document.createElement("div");
                 data = `
                     <nav id="nav" class="navbar fixed-top navbar-dark bg-primary">
-                        <a class="navbar-brand" href="#">Price Checcer</a>
+                        <a class="navbar-brand" href="https://binarywiz.github.io/Timeless-Apps-Website/home.html" target="_blank">
+                            <img src="https://dl.dropboxusercontent.com/s/wi3nwhlki20gxy1/cropped_white_logo.png?dl=0" style="max-height: 70px; max-width: 70px;">
+                            Price Assist
+                        </a>
                     </nav>
                 
                     <div id="card-container">
