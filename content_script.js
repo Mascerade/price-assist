@@ -24,13 +24,16 @@ chrome.runtime.onMessage.addListener(
                 iframe.id = "iframe";
                 var iframe_wrapper = document.createElement("div");
                 data = `
+                    
                     <nav id="nav" class="navbar fixed-top navbar-dark bg-primary">
                         <a class="navbar-brand" href="https://binarywiz.github.io/Timeless-Apps-Website/home.html" target="_blank">
                             <img src="https://dl.dropboxusercontent.com/s/wi3nwhlki20gxy1/cropped_white_logo.png?dl=0" style="max-height: 70px; max-width: 70px;">
-                            Price Assist
+                            <span style="font-size: 30px;"> Priceer </span>
                         </a>
+                        <button id="close-button" style="background-color: Transparent; background-repeat: no-repeat; border: none; outline: none;">
+                            <i class="material-icons pb-close" id="close-icon" style="color: white; font-size: 24px;">close</i>
+                        </button>
                     </nav>
-                
                     <div id="card-container">
                     
                 `
@@ -62,11 +65,15 @@ chrome.runtime.onMessage.addListener(
                 iframe_wrapper.appendChild(iframe)
                 // document.body.appendChild(iframe_wrapper);
                 document.getElementById("leftCol").appendChild(iframe_wrapper)
-                $("iframe").contents().find("head").html("<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/snlfm9vr3j6bbj5/bootstrap-flatly.min.css?dl=0'>")
-                myFrame = $("iframe").contents().find("body");
-                myFrame.html(data);
-                console.log(data);
-                console.log(iframe);
+                $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
+                    "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
+                    "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
+                    "<link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/snlfm9vr3j6bbj5/bootstrap-flatly.min.css?dl=0'>")
+                $("iframe").contents().find("body").html(data);
+                $("iframe").contents().find("#close-button").click(function() {
+                    console.log("WORKED!");
+                    iframe_wrapper.style.setProperty("visibility", "hidden")
+                });
             });
             // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
             internal_check = "DO NOTHING"
@@ -75,7 +82,7 @@ chrome.runtime.onMessage.addListener(
 );
 
 function addCard(name, price, link) {
-    card = `
+    var card = `
         <div id="card" class="card mb-3" style="max-width: 325px;">
             <div class="card-body">
                 <h4 id="retailer" class="card-title">` + name +`</h4>
@@ -83,6 +90,6 @@ function addCard(name, price, link) {
             </div>
             <a href="` + link + `" id="link-button" class="btn btn-primary" target="_blank">Link!</a>
         </div>
-    `
+    `;
     return card
 }
