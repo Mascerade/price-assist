@@ -100,8 +100,8 @@ chrome.runtime.onMessage.addListener(
                 data += "</div>";
 
                 // Sets the style of both the wrapper and the actual iframe and adds the iframe to the wrapper
-                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px; margin-left: 25%;";
-                iframe_wrapper.style.cssText = "visibility: visible; border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
+                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px;";
+                iframe_wrapper.style.cssText = "visibility: visible; border: none; width: 100%; display: flex; justify-content: center; align-items: center; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
                 iframe_wrapper.appendChild(iframe);
 
                 // Appends the iframe_wrapper (which contains the iframe) to underneath the amazon product picture
