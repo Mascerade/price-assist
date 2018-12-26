@@ -1,0 +1,28 @@
+body {
+    font-family: "Raleway";
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+    padding-top: 83px;
+}
+
+#link-button {
+    margin-right: 1%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+}
+
+#card {
+    margin-right: 0.5%;
+    margin-left: 0.5%
+}
+
+p {
+    font-family: "Raleway";
+    font-weight: 500;
+}
+
+button {
+    font-family: "Raleway";
+    font-weight: 500;
+}

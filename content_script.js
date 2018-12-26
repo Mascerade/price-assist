@@ -74,7 +74,6 @@ chrome.runtime.onMessage.addListener(
                 request.data = JSON5.parse(request.data);
                 // (FOR DEBUG) console.log(request.data);
 
-                
                 for(const [key, value] of Object.entries(request.data)) {
                     if(key == "amazon_data") {
                         data += addCard("Amazon", value, "#");
