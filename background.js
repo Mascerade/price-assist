@@ -14,6 +14,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                     http.send(); // Sends the request to the server
                     http.onreadystatechange=(e)=> { // If something gets sent back from the server
                         // Sends over the information
+                        // console.log(http.responseText);
                         JSON.stringify(JSON5.parse(http.responseText));
                         var retailer_popup = chrome.runtime.getURL("retailers-popup.html");
                         var retailer_css = chrome.runtime.getURL("retailers-popup.css");
@@ -24,4 +25,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             });
         }
     }
+});
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+    console.log("Pressed");
+    chrome.tabs.sendMessage(tab.id, {status: "Remove"})
 });

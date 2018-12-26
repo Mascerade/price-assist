@@ -1,11 +1,11 @@
 {
-    "name": "Priceer",
+    "name": "Price Assist",
     "description" : "Makes shopping easier",
     "version": "1.0",
     "manifest_version": 2,
     "browser_action": {
       "default_icon": {
-        "32": "img/icon.png"
+        "128": "img/logo_transparent.png"
       }
     },
     "permissions": [
