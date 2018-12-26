@@ -14,11 +14,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                     http.send(); // Sends the request to the server
                     http.onreadystatechange=(e)=> { // If something gets sent back from the server
                         // Sends over the information
-                        // console.log(http.responseText);
+                        // (FOR DEBUG) console.log(http.responseText);
+
+                        // Converts the string coming from the server to an actual JSON
                         JSON.stringify(JSON5.parse(http.responseText));
-                        var retailer_popup = chrome.runtime.getURL("retailers-popup.html");
-                        var retailer_css = chrome.runtime.getURL("retailers-popup.css");
-                        var bootstrap = chrome.runtime.getURL("Bootstrap-CSS/bootstrap.min.css");
+
+                        // Sends the information from the server to the content_script to display the information
                         chrome.tabs.sendMessage(tab.id, {status: "Display", data: http.responseText}, function(response) {}) 
                     }
                 }
@@ -28,6 +29,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    console.log("Pressed");
-    chrome.tabs.sendMessage(tab.id, {status: "Remove"})
+    // (FOR DEBUG) console.log("Pressed");
+    chrome.tabs.sendMessage(tab.id, {status: "Remove"}) // Sends a message to the content_script saying to change the visibility of the gui
 });

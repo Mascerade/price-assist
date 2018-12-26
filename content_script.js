@@ -1,25 +1,30 @@
-var internal_check = ""; // This is to ake sure that we only will display once
-var internal_display_count = 0;
-var iframe;
-var iframe_wrapper;
+var internal_check = ""; // This is to make sure that we only will display once
+var internal_display_count = 0; // Makes sure that only 1 gui will every be shown at a time
+var iframe; // Makes the global iframe variable
+var iframe_wrapper; // Makes the global iframe_wrapper
 
 // Only executes when we receive a message from background_script
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        // Checks if the background_script sent a message to Check Electronics
         if(request.status == "Remove") {
-            if(typeof iframe_wrapper != undefined || typeof iframe_wrapper != null) {
 
-                console.log(iframe_wrapper.style.visibility);
+            // Checks if the iframe and iframe_wrapper has been made
+            if(typeof iframe_wrapper != undefined || typeof iframe_wrapper != null) {
+                // (FOR DEBUGGING) console.log(iframe_wrapper.style.visibility);
+
+                // If the visibility of iframe_wrapper is already hidden, make it visible
                 if (iframe_wrapper.style.visibility == "hidden") {
                     iframe_wrapper.style.setProperty("visibility", "visible");
                 }
+
+                // Make it hidden if it is visible
                 else {
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 }
             }
         }
 
+        // Checks if the background_script sent a message to Check Electronics
         if(request.status == "Check Electronics") {
             // Checks if the category is "Electronics"
             if(document.getElementsByClassName("nav-search-label")[0].textContent == "Electronics"){ 
@@ -37,14 +42,19 @@ chrome.runtime.onMessage.addListener(
         else if(request.status == "Display" && internal_check == "Display") {
             $(document).ready(function() {
                 if(internal_display_count >= 1) {
-                    // console.log("REMOVE")
-                    // console.log(internal_display_count)
+
+                    // (FOR DEBUG) console.log("REMOVE")
+                    // (FOR DEBUG) console.log(internal_display_count)
                     document.getElementById("iframe-wrapper").remove();
                 }
+
+                // Creates the iframe and the div surrounding it and assigns their id's
                 iframe = document.createElement("iframe");
                 iframe.id = "iframe";
                 iframe_wrapper = document.createElement("div");
                 iframe_wrapper.id = "iframe-wrapper";
+
+                // The navbar of the gui
                 data = `
                     
                     <nav id="nav" class="navbar fixed-top navbar-dark bg-primary">
@@ -59,8 +69,10 @@ chrome.runtime.onMessage.addListener(
                     <div id="card-container">
                     
                 `;
+
+                // Parses the data coming from the background
                 request.data = JSON5.parse(request.data);
-                // console.log(request.data);
+                // (FOR DEBUG) console.log(request.data);
 
                 
                 for(const [key, value] of Object.entries(request.data)) {
@@ -68,34 +80,50 @@ chrome.runtime.onMessage.addListener(
                         data += addCard("Amazon", value, "#");
                     }
 
+                    // Does not show the retailer if it is equal to any of these:
                     else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price" || value[1] == "undefined") {
                         
                     }
 
+                    // If there was any error on the server side and it wasn't equal to anything ^, still don't display
                     else if(value == undefined || value.length == 0) {
                         
                     }
 
+                    // If it actually has data, display the retailer
                     else {
                         data += addCard(value[0], value[1], value[2]);
                     }
                 }
+
+                // The end tag for the div that contains all of the cards
                 data += "</div>";
 
+                // Sets the style of both the wrapper and the actual iframe and adds the iframe to the wrapper
                 iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px; margin-left: 25%;";
                 iframe_wrapper.style.cssText = "visibility: visible; border: none; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
                 iframe_wrapper.appendChild(iframe);
-                // document.body.appendChild(iframe_wrapper);
+
+                // Appends the iframe_wrapper (which contains the iframe) to underneath the amazon product picture
                 document.getElementById("leftCol").appendChild(iframe_wrapper);
+
+                // Adds the stylesheets and other aesthetics needed for the gui
                 $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
                     "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
                     "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
                     "<link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/snlfm9vr3j6bbj5/bootstrap-flatly.min.css?dl=0'>");
+
+                // Adds the data with the cards and the navbar to the iframe
                 $("iframe").contents().find("body").html(data);
+
+                // When the "X" is pressed, set the visibility of the gui to hidden
                 $("iframe").contents().find("#close-button").click(function() {
-                    // console.log("WORKED!");
+
+                    // (FOR DEBUG) console.log("WORKED!");
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
+
+                // For when the url changes on the same amazon page; Makes sure there is only 1 gui
                 internal_display_count += 1;
             });
             // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
@@ -104,9 +132,9 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-
-
 function addCard(name, price, link) {
+
+    // Adds the custom data of each individual retailer to the card
     var card = `
         <div id="card" class="card mb-3" style="max-width: 325px;">
             <div class="card-body">
