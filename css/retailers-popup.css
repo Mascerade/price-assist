@@ -17,6 +17,10 @@ body {
     margin-left: 0.5%
 }
 
+#base-price {
+    font-size: 20px;
+}
+
 p {
     font-family: "Raleway";
     font-weight: 500;
