@@ -111,7 +111,8 @@ chrome.runtime.onMessage.addListener(
                 $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
                     "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
                     "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
-                    "<link rel='stylesheet' href='https://raw.githack.com/BinaryWiz/Price-Assist/master/css/retailers-popup.css'><link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/bootstrap-flatly.min.css'>");
+                    "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/f52ef96a1b0add58e65351ee82fd772c9f786253/css/retailers-popup.css'> \n" +
+                    "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/bootstrap-flatly.min.css'>");
 
                 // Adds the data with the cards and the navbar to the iframe
                 $("iframe").contents().find("body").html(data);
