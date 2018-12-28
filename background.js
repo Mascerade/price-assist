@@ -1,3 +1,4 @@
+var send = true; // Checks if we should send a message to display the results
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // Only runs when loading the tab is complete
     if (changeInfo.status == "complete") {
@@ -18,11 +19,26 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
                         // Converts the string coming from the server to an actual JSON
                         JSON.stringify(JSON5.parse(http.responseText));
+                        console.log(http.responseText);
 
-                        // Sends the information from the server to the content_script to display the information
-                        chrome.tabs.sendMessage(tab.id, {status: "Display", data: http.responseText}, function(response) {}) 
+                        // If there was an error getting the item model, don't display anything to the user
+                        if(http.responseText.includes("Error")){
+                            console.log("GAUTAM");
+                            send = false;
+                        }
+
+                        // Send message only if there was actual info in server response
+                        if(send == true) {
+                            // Sends the information from the server to the content_script to display the information
+                            chrome.tabs.sendMessage(tab.id, {
+                                status: "Display",
+                                data: http.responseText
+                            }, function (response) {
+                            })
+                        }
                     }
                 }
+                send = true;
             });
         }
     }

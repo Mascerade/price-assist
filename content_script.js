@@ -75,6 +75,7 @@ chrome.runtime.onMessage.addListener(
                 // (FOR DEBUG) console.log(request.data);
 
                 for(const [key, value] of Object.entries(request.data)) {
+
                     if(key == "amazon_data") {
                         data += addCard("Amazon", value, "#");
                     }
@@ -110,7 +111,7 @@ chrome.runtime.onMessage.addListener(
                 $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
                     "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
                     "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
-                    "<link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/i3kti4rds4wq7r9/retailers-popup.css?dl=0'><link rel='stylesheet' href='https://dl.dropboxusercontent.com/s/snlfm9vr3j6bbj5/bootstrap-flatly.min.css?dl=0'>");
+                    "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/retailers-popup.css'><link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/bootstrap-flatly.min.css'>");
 
                 // Adds the data with the cards and the navbar to the iframe
                 $("iframe").contents().find("body").html(data);
