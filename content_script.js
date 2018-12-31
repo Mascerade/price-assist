@@ -6,14 +6,14 @@ var iframe_wrapper; // Makes the global iframe_wrapper
 // Only executes when we receive a message from background_script
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if(request.status == "Remove") {
+        if(request.status === "Remove") {
 
             // Checks if the iframe and iframe_wrapper has been made
             if(typeof iframe_wrapper != undefined || typeof iframe_wrapper != null) {
                 // (FOR DEBUGGING) console.log(iframe_wrapper.style.visibility);
 
                 // If the visibility of iframe_wrapper is already hidden, make it visible
-                if (iframe_wrapper.style.visibility == "hidden") {
+                if (iframe_wrapper.style.visibility === "hidden") {
                     iframe_wrapper.style.setProperty("visibility", "visible");
                 }
 
@@ -25,9 +25,9 @@ chrome.runtime.onMessage.addListener(
         }
 
         // Checks if the background_script sent a message to Check Electronics
-        if(request.status == "Check Electronics") {
+        if(request.status === "Check Electronics") {
             // Checks if the category is "Electronics"
-            if(document.getElementsByClassName("nav-search-label")[0].textContent == "Electronics"){ 
+            if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics"){
                 // If it is, send message back to background_script to Get Data
                 sendResponse({status: "Get data"});
                 // Sets the internal check to "Display"
@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(
         }
 
         // Only display the iframe if the status is to display and the internal_check says to display
-        else if(request.status == "Display" && internal_check == "Display") {
+        else if(request.status === "Display" && internal_check === "Display") {
             $(document).ready(function() {
                 if(internal_display_count >= 1) {
 
@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(
                 iframe_wrapper.id = "iframe-wrapper";
 
                 // The navbar of the gui
-                data = `
+                var data = `
                     
                     <nav id="nav" class="navbar fixed-top navbar-dark bg-primary">
                         <a class="navbar-brand" href="https://binarywiz.github.io/Timeless-Apps-Website/home.html" target="_blank">
@@ -76,17 +76,17 @@ chrome.runtime.onMessage.addListener(
 
                 for(const [key, value] of Object.entries(request.data)) {
 
-                    if(key == "amazon_data") {
+                    if(key === "amazon_data") {
                         data += addCard("Amazon", value, "#");
                     }
 
                     // Does not show the retailer if it is equal to any of these:
-                    else if(value[1] == "Could Not Find Price" || value[1] == "Could not find price" || value[1] == "undefined") {
+                    else if(value[1] === "Could Not Find Price" || value[1] === "Could not find price" || value[1] === "undefined") {
                         
                     }
 
                     // If there was any error on the server side and it wasn't equal to anything ^, still don't display
-                    else if(value == undefined || value.length == 0) {
+                    else if(value === undefined || value.length === 0) {
                         
                     }
 
@@ -100,8 +100,20 @@ chrome.runtime.onMessage.addListener(
                 data += "</div>";
 
                 // Sets the style of both the wrapper and the actual iframe and adds the iframe to the wrapper
-                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px;";
-                iframe_wrapper.style.cssText = "visibility: visible; border: none; width: 100%; display: flex; justify-content: center; align-items: center; transform: translateZ(0px); overflow: hidden; background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
+                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px; " +
+                    "-webkit-scrollbar { \n" +
+                    "width: 12px;\n" +
+                    "background-color: #F5F5F5;\n" +
+                    "};" +
+                    "-webkit-scrollbar-thumb { \n" +
+                    "border-radius: 10px;\n" +
+                    "-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);\n" +
+                    "background-color: #D62929;\n" +
+                    "};";
+                iframe_wrapper.style.cssText = "visibility: visible; border: none; width: 100%; display: flex; " +
+                    "justify-content: center; align-items: center; transform: translateZ(0px); overflow: hidden; " +
+                    "background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; " +
+                    "border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
                 iframe_wrapper.appendChild(iframe);
 
                 // Appends the iframe_wrapper (which contains the iframe) to underneath the amazon product picture
@@ -111,19 +123,22 @@ chrome.runtime.onMessage.addListener(
                 $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
                     "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
                     "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
-                    "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/f52ef96a1b0add58e65351ee82fd772c9f786253/css/retailers-popup.css'> \n" +
+                    "<link rel='stylesheet' href='https://raw.githack.com/BinaryWiz/Price-Assist/master/css/retailers-popup.css'> \n" +
                     "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/bootstrap-flatly.min.css'>");
 
                 // Adds the data with the cards and the navbar to the iframe
                 $("iframe").contents().find("body").html(data);
-
+                $("iframe").addClass("scrollbar scrollbar-primary");
                 // When the "X" is pressed, set the visibility of the gui to hidden
                 $("iframe").contents().find("#close-button").click(function() {
 
                     // (FOR DEBUG) console.log("WORKED!");
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
-
+                var top_of_iframe = $("#iframe-wrapper").position().top;
+                console.log(top_of_iframe);
+                window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
+                console.log($("body").position().top);
                 // For when the url changes on the same amazon page; Makes sure there is only 1 gui
                 internal_display_count += 1;
             });
