@@ -57,16 +57,16 @@ chrome.runtime.onMessage.addListener(
                 // The navbar of the gui
                 var data = `
                     
-                    <nav id="nav" class="navbar fixed-top navbar-dark bg-primary">
+                    <nav id="nav" class="navbar fixed-top navbar-dark bg-dark" style="margin-bottom: 13px;">
                         <a class="navbar-brand" href="https://binarywiz.github.io/Timeless-Apps-Website/home.html" target="_blank">
                             <img src="https://dl.dropboxusercontent.com/s/7vleowye5psd2mj/only_logo_transparent_white.png?dl=0" style="max-height: 46px; max-width: 46px;">
-                            <span style="font-size: 20px; color: white; margin-left: 12px;"> Price Assist </span>
+                            <span style="font-size: 18px; color: white; margin-left: 12px;"> Price Assist </span>
                         </a>
                         <button id="close-button" style="background-color: Transparent; background-repeat: no-repeat; border: none; outline: none;">
                             <i class="material-icons pb-close" id="close-icon" style="color: white; font-size: 24px;">close</i>
                         </button>
                     </nav>
-                    <div id="card-container">
+                    <div id="card-container" style="margin-top: 17px;">
                     
                 `;
 
@@ -100,7 +100,7 @@ chrome.runtime.onMessage.addListener(
                 data += "</div>";
 
                 // Sets the style of both the wrapper and the actual iframe and adds the iframe to the wrapper
-                iframe.style.cssText = "height: 500px; width: 300px; border: none; border-radius: 5px; " +
+                iframe.style.cssText = "height: 500px; width: 300px; border: none; " +
                     "-webkit-scrollbar { \n" +
                     "width: 12px;\n" +
                     "background-color: #F5F5F5;\n" +
@@ -112,8 +112,7 @@ chrome.runtime.onMessage.addListener(
                     "};";
                 iframe_wrapper.style.cssText = "visibility: visible; border: none; width: 100%; display: flex; " +
                     "justify-content: center; align-items: center; transform: translateZ(0px); overflow: hidden; " +
-                    "background-color: transparent; webkit-border-radius: 5px; -moz-border-radius: 5px; " +
-                    "border-radius: 5px; height: 500; width: 300; z-index: 100000000; border: none;";
+                    "background-color: transparent;  height: 500; width: 300; z-index: 100000000; border: none;";
                 iframe_wrapper.appendChild(iframe);
 
                 // Appends the iframe_wrapper (which contains the iframe) to underneath the amazon product picture
@@ -124,7 +123,7 @@ chrome.runtime.onMessage.addListener(
                     "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
                     "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
                     "<link rel='stylesheet' href='https://raw.githack.com/BinaryWiz/Price-Assist/master/css/retailers-popup.css'> \n" +
-                    "<link rel='stylesheet' href='https://rawcdn.githack.com/BinaryWiz/Price-Assist/2b50e26b6f3e74a721c1c5006aac0c91321179ad/css/bootstrap-flatly.min.css'>");
+                    "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/lux/bootstrap.min.css'>");
 
                 // Adds the data with the cards and the navbar to the iframe
                 $("iframe").contents().find("body").html(data);
@@ -153,11 +152,11 @@ function addCard(name, price, link) {
     // Adds the custom data of each individual retailer to the card
     var card = `
         <div id="card" class="card mb-3" style="max-width: 325px;">
-            <div class="card-body">
-                <h4 id="retailer" class="card-title">` + name +`</h4>
-                <p id="base-price" class="card-text">Base Price: ` + price + `</p>
+            <div class="card-body" style="font-color: black;">
+                <h4 id="retailer" class="card-title text-dark">` + name +`</h4>
+                <p id="base-price" class="card-text text-dark">Base Price: ` + price + `</p>
             </div>
-            <a href="` + link + `" id="link-button" class="btn btn-primary" target="_blank">Link!</a>
+            <a href="` + link + `" id="link-button" class="btn btn-primary" target="_blank">Product</a>
         </div>
     `;
     return card;
