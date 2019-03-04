@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener(
                 internal_check = "Display";
 
                 // If it is, send message back to background_script to Get Data
-                sendResponse({status: "Get data"});
+                sendResponse({status: "Get data", price: price, item_model: item_model});
             }
 
             else {

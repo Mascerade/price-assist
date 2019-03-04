@@ -9,8 +9,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 console.log("Sent message");
                 // If the tab is on Electronics, content_script sends response to get data from server
                 if(response.status == "Get data") {
+                    console.log(response);
                     const http = new XMLHttpRequest(); // Defines the Http request
-                    const url = "http://localhost:5000/query?link=" + tab.url; // Specifies the Amazon url for the server
+                    const url = "http://localhost:5000/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model; // Specifies the Amazon url for the server
+                    console.log(url);
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server
                     http.onreadystatechange=(e)=> { // If something gets sent back from the server
