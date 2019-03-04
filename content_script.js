@@ -26,13 +26,32 @@ chrome.runtime.onMessage.addListener(
 
         // Checks if the background_script sent a message to Check Electronics
         if(request.status === "Check Electronics") {
-            // Checks if the category is "Electronics"
-            if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics"){
+
+            if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics") {
+                // Gets the price
+                let price = document.getElementById("priceblock_ourprice").textContent;
+                if(price == undefined) {
+                    price = document.getElementById("priceblock_dealprice").textContent;
+                }
+
+                let item_model;
+                let row_content = document.getElementsByClassName("a-size-base");
+
+                // Gets the item_model through this loop
+                for(let i = 0; i < row_content.length; i++) {
+                    if(row_content[i].textContent.includes("Item model number")) {
+                        item_model = row_content[i+1].textContent;
+                    }
+                }
+                item_model = item_model.replace(/\s/g, "");
+
+                // Sets the internal check to "Display"
+                internal_check = "Display";
+
                 // If it is, send message back to background_script to Get Data
                 sendResponse({status: "Get data"});
-                // Sets the internal check to "Display"
-                internal_check = "Display"
             }
+
             else {
                 sendResponse({status: "Not valid"});
             }
@@ -42,9 +61,6 @@ chrome.runtime.onMessage.addListener(
         else if(request.status === "Display" && internal_check === "Display") {
             $(document).ready(function() {
                 if(internal_display_count >= 1) {
-
-                    // (FOR DEBUG) console.log("REMOVE")
-                    // (FOR DEBUG) console.log(internal_display_count)
                     document.getElementById("iframe-wrapper").remove();
                 }
 
@@ -135,9 +151,7 @@ chrome.runtime.onMessage.addListener(
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
                 var top_of_iframe = $("#iframe-wrapper").position().top;
-                console.log(top_of_iframe);
                 window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
-                console.log($("body").position().top);
                 // For when the url changes on the same amazon page; Makes sure there is only 1 gui
                 internal_display_count += 1;
             });
