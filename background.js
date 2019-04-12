@@ -12,7 +12,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                     console.log(response);
                     const http = new XMLHttpRequest(); // Defines the Http request
                     let url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model; // Specifies the Amazon url for the server
-                    url = "http://192.168.0.177:5000/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model;
                     console.log(url);
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server
