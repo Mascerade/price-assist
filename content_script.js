@@ -63,96 +63,17 @@ chrome.runtime.onMessage.addListener(
                 if(internal_display_count >= 1) {
                     document.getElementById("iframe-wrapper").remove();
                 }
-
-                // Creates the iframe and the div surrounding it and assigns their id's
-                iframe = document.createElement("iframe");
-                iframe.id = "iframe";
-                iframe_wrapper = document.createElement("div");
-                iframe_wrapper.id = "iframe-wrapper";
-
-                // The navbar of the gui
-                var data = `
-                    
-                    <nav id="nav" class="navbar fixed-top navbar-dark bg-dark" style="margin-bottom: 13px;">
-                        <a class="navbar-brand" href="https://binarywiz.github.io/Timeless-Apps-Website/home.html" target="_blank">
-                            <img src="https://dl.dropboxusercontent.com/s/7vleowye5psd2mj/only_logo_transparent_white.png?dl=0" style="max-height: 46px; max-width: 46px;">
-                            <span style="font-size: 18px; color: white; margin-left: 12px;"> Price Assist </span>
-                        </a>
-                        <button id="close-button" style="background-color: Transparent; background-repeat: no-repeat; border: none; outline: none;">
-                            <i class="material-icons pb-close" id="close-icon" style="color: white; font-size: 24px;">close</i>
-                        </button>
-                    </nav>
-                    <div id="card-container" style="margin-top: 17px;">
-                    
-                `;
-
-                // Parses the data coming from the background
                 request.data = JSON5.parse(request.data);
-                // (FOR DEBUG) console.log(request.data);
-
-                for(const [key, value] of Object.entries(request.data)) {
-
-                    if(key === "amazon_data") {
-                        data += addCard("Amazon", value, "#");
-                    }
-
-                    // Does not show the retailer if it is equal to any of these:
-                    else if(value[1] === "Could Not Find Price" || value[1] === "Could not find price" || value[1] === "undefined") {
-                        
-                    }
-
-                    // If there was any error on the server side and it wasn't equal to anything ^, still don't display
-                    else if(value === undefined || value.length === 0) {
-                        
-                    }
-
-                    // If it actually has data, display the retailer
-                    else {
-                        data += addCard(value[0], value[1], value[2]);
-                    }
-                }
-
-                // The end tag for the div that contains all of the cards
-                data += "</div>";
-
-                // Sets the style of both the wrapper and the actual iframe and adds the iframe to the wrapper
-                iframe.style.cssText = "height: 500px; width: 300px; border: none; " +
-                    "-webkit-scrollbar { \n" +
-                    "width: 12px;\n" +
-                    "background-color: #F5F5F5;\n" +
-                    "};" +
-                    "-webkit-scrollbar-thumb { \n" +
-                    "border-radius: 10px;\n" +
-                    "-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);\n" +
-                    "background-color: #D62929;\n" +
-                    "};";
-                iframe_wrapper.style.cssText = "visibility: visible; border: none; width: 100%; display: flex; " +
-                    "justify-content: center; align-items: center; transform: translateZ(0px); overflow: hidden; " +
-                    "background-color: transparent;  height: 500; width: 300; z-index: 100000000; border: none;";
-                iframe_wrapper.appendChild(iframe);
-
-                // Appends the iframe_wrapper (which contains the iframe) to underneath the amazon product picture
-                document.getElementById("leftCol").appendChild(iframe_wrapper);
-
-                // Adds the stylesheets and other aesthetics needed for the gui
-                $("iframe").contents().find("head").html("<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">\n" +
-                    "<link rel=\"stylesheet\" href=\"https://code.getmdl.io/1.3.0/material.indigo-pink.min.css\">\n" +
-                    "<link href='https://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet'> \n" +
-                    "<link rel='stylesheet' href='https://raw.githack.com/BinaryWiz/Price-Assist/master/css/retailers-popup.css'> \n" +
-                    "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/lux/bootstrap.min.css'>");
-
-                // Adds the data with the cards and the navbar to the iframe
-                $("iframe").contents().find("body").html(data);
-                $("iframe").addClass("scrollbar scrollbar-primary");
-                // When the "X" is pressed, set the visibility of the gui to hidden
+                document.getElementById("leftCol").innerHTML += request.data["iframe"];
+                $("iframe").contents().find("head").html(request.data["head"]);
+                $("iframe").contents().find("body").html(request.data["body"]);
                 $("iframe").contents().find("#close-button").click(function() {
-
-                    // (FOR DEBUG) console.log("WORKED!");
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
                 var top_of_iframe = $("#iframe-wrapper").position().top;
                 window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
                 // For when the url changes on the same amazon page; Makes sure there is only 1 gui
+                iframe_wrapper = document.getElementById("iframe-wrapper");
                 internal_display_count += 1;
             });
             // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
@@ -160,18 +81,3 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
-
-function addCard(name, price, link) {
-
-    // Adds the custom data of each individual retailer to the card
-    var card = `
-        <div id="card" class="card mb-3" style="max-width: 325px;">
-            <div class="card-body" style="font-color: black;">
-                <h4 id="retailer" class="card-title text-dark">` + name +`</h4>
-                <p id="base-price" class="card-text text-dark">Base Price: ` + price + `</p>
-            </div>
-            <a href="` + link + `" id="link-button" class="btn btn-primary" target="_blank">Product</a>
-        </div>
-    `;
-    return card;
-}

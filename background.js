@@ -11,7 +11,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 if(response.status == "Get data") {
                     console.log(response);
                     const http = new XMLHttpRequest(); // Defines the Http request
-                    const url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model; // Specifies the Amazon url for the server
+                    let url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model; // Specifies the Amazon url for the server
+                    url = "http://192.168.0.177:5000/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model;
                     console.log(url);
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server
@@ -21,7 +22,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
                         // Converts the string coming from the server to an actual JSON
                         JSON.stringify(JSON5.parse(http.responseText));
-                        console.log(http.responseText);
 
                         // If there was an error getting the item model, don't display anything to the user
                         if(http.responseText.includes("Error")){
