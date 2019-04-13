@@ -6,25 +6,21 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         if (tab.url.includes("www.amazon.com") && tab.url.includes("dp")){
             // Sends a message to the content_script saying to check if the category is electronics
             chrome.tabs.sendMessage(tab.id, {status:"Check Electronics"}, function(response) {
-                console.log("Sent message");
                 // If the tab is on Electronics, content_script sends response to get data from server
                 if(response.status == "Get data") {
                     console.log(response);
                     const http = new XMLHttpRequest(); // Defines the Http request
-                    let url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model; // Specifies the Amazon url for the server
+                    let url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model;
                     console.log(url);
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server
                     http.onreadystatechange=(e)=> { // If something gets sent back from the server
-                        // Sends over the information
-                        // (FOR DEBUG) console.log(http.responseText);
 
                         // Converts the string coming from the server to an actual JSON
                         JSON.stringify(JSON5.parse(http.responseText));
 
                         // If there was an error getting the item model, don't display anything to the user
                         if(http.responseText.includes("Error")){
-                            console.log("GAUTAM");
                             send = false;
                         }
 
@@ -35,7 +31,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                                 status: "Display",
                                 data: http.responseText
                             }, function (response) {
-                            })
+                            });
                         }
                     }
                 }
@@ -46,6 +42,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    // (FOR DEBUG) console.log("Pressed");
-    chrome.tabs.sendMessage(tab.id, {status: "Remove"}) // Sends a message to the content_script saying to change the visibility of the gui
+    // Sends a message to the content_script saying to change the visibility of the gui
+    chrome.tabs.sendMessage(tab.id, {status: "Remove"})
 });

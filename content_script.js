@@ -30,10 +30,13 @@ chrome.runtime.onMessage.addListener(
             if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics") {
                 // Gets the price
                 let price = document.getElementById("priceblock_ourprice").textContent;
+
+                // In case the priceblock_ourprice doesn't contian the price, get the dealprice instead (backup)
                 if(price == undefined) {
                     price = document.getElementById("priceblock_dealprice").textContent;
                 }
 
+                // Defines both the item_model and the rows containing the item model (product description)
                 let item_model;
                 let row_content = document.getElementsByClassName("a-size-base");
 
@@ -43,6 +46,7 @@ chrome.runtime.onMessage.addListener(
                         item_model = row_content[i+1].textContent;
                     }
                 }
+                // Gets rid of the whitespace of the item_model
                 item_model = item_model.replace(/\s/g, "");
 
                 // Sets the internal check to "Display"
@@ -59,19 +63,34 @@ chrome.runtime.onMessage.addListener(
 
         // Only display the iframe if the status is to display and the internal_check says to display
         else if(request.status === "Display" && internal_check === "Display") {
+
+            // Allows you to use jquery
             $(document).ready(function() {
+
+                // This is to remove the "old" iframe and replace it with the new one generated
                 if(internal_display_count >= 1) {
                     document.getElementById("iframe-wrapper").remove();
                 }
+
+                // Parse the request data that contains the html that has the iframe
                 request.data = JSON5.parse(request.data);
+
+                // Put iframe where the left column is
                 document.getElementById("leftCol").innerHTML += request.data["iframe"];
+
+                // Insert the html from the server in necessary places
                 $("iframe").contents().find("head").html(request.data["head"]);
                 $("iframe").contents().find("body").html(request.data["body"]);
+
+                // If the "X" is clicked, make it hidden
                 $("iframe").contents().find("#close-button").click(function() {
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
+
+                // Scrolls up to the iframe that is in the leftCol
                 var top_of_iframe = $("#iframe-wrapper").position().top;
                 window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
+
                 // For when the url changes on the same amazon page; Makes sure there is only 1 gui
                 iframe_wrapper = document.getElementById("iframe-wrapper");
                 internal_display_count += 1;
