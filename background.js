@@ -8,14 +8,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             chrome.tabs.sendMessage(tab.id, {status:"Check Electronics"}, function(response) {
                 // If the tab is on Electronics, content_script sends response to get data from server
                 if(response.status == "Get data") {
-                    console.log(response);
                     const http = new XMLHttpRequest(); // Defines the Http request
                     let url = "http://www.timeless-apps.com/api/query?link=" + tab.url + "&amazon_price=" + response.price + "&item_model=" + response.item_model;
-                    console.log(url);
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server
                     http.onreadystatechange=(e)=> { // If something gets sent back from the server
-
                         // Converts the string coming from the server to an actual JSON
                         JSON.stringify(JSON5.parse(http.responseText));
 

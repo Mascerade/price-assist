@@ -26,16 +26,23 @@ chrome.runtime.onMessage.addListener(
 
         // Checks if the background_script sent a message to Check Electronics
         if(request.status === "Check Electronics") {
-
             if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics") {
-                // Gets the price
-                let price = document.getElementById("priceblock_ourprice").textContent;
-
-                // In case the priceblock_ourprice doesn't contian the price, get the dealprice instead (backup)
-                if(price == undefined) {
-                    price = document.getElementById("priceblock_dealprice").textContent;
+                let price;
+                try {
+                    // Gets the price
+                    price = document.getElementById("priceblock_ourprice").textContent;
                 }
 
+                catch(err) {
+                    try {
+                        // In case the priceblock_ourprice doesn't contian the price, get the dealprice instead (backup)
+                        price = document.getElementById("priceblock_dealprice").textContent;
+                    }
+
+                    catch (err) {
+                        price = "Price Not Available";
+                    }
+                }
                 // Defines both the item_model and the rows containing the item model (product description)
                 let item_model;
                 let row_content = document.getElementsByClassName("a-size-base");
@@ -51,7 +58,6 @@ chrome.runtime.onMessage.addListener(
 
                 // Sets the internal check to "Display"
                 internal_check = "Display";
-
                 // If it is, send message back to background_script to Get Data
                 sendResponse({status: "Get data", price: price, item_model: item_model});
             }
