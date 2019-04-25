@@ -83,6 +83,7 @@ chrome.runtime.onMessage.addListener(
 
                 // Put iframe where the left column is
                 document.getElementById("leftCol").innerHTML += request.data["iframe"];
+                // document.getElementsByTagName("body")[0].innerHTML += request.data["iframe"];
 
                 // Insert the html from the server in necessary places
                 $("iframe").contents().find("head").html(request.data["head"]);
@@ -92,13 +93,14 @@ chrome.runtime.onMessage.addListener(
                 $("iframe").contents().find("#close-button").click(function() {
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
+                $("iframe-wrapper").draggable();
+                iframe_wrapper = document.getElementById("iframe-wrapper");
 
                 // Scrolls up to the iframe that is in the leftCol
                 var top_of_iframe = $("#iframe-wrapper").position().top;
                 window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
 
                 // For when the url changes on the same amazon page; Makes sure there is only 1 gui
-                iframe_wrapper = document.getElementById("iframe-wrapper");
                 internal_display_count += 1;
             });
             // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
