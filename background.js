@@ -4,7 +4,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // Only runs when loading the tab is complete
     if (changeInfo.status == "complete") {
         // Only executes the rest of the code if the tab is on an Amazon product page
-        if (tab.url.includes("www.amazon.com") && tab.url.includes("dp")){
+        if (tab.url.includes("www.amazon.com") && tab.url.includes("dp") || tab.url.include("gp")){
             retailer = "Amazon";
             // Sends a message to the content_script saying to check if the category is electronics
             chrome.tabs.sendMessage(tab.id, {status:"Check Electronics"}, function(response) {
