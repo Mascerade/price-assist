@@ -82,7 +82,7 @@ chrome.runtime.onMessage.addListener(
                 request.data = JSON5.parse(request.data);
 
                 // Put iframe where the left column is
-                document.getElementById("leftCol").innerHTML += request.data["iframe"];
+                document.getElementById("image-canvas-caption").innerHTML += request.data["iframe"];
                 // document.getElementsByTagName("body")[0].innerHTML += request.data["iframe"];
 
                 // Insert the html from the server in necessary places
@@ -93,7 +93,6 @@ chrome.runtime.onMessage.addListener(
                 $("iframe").contents().find("#close-button").click(function() {
                     iframe_wrapper.style.setProperty("visibility", "hidden");
                 });
-                $("iframe-wrapper").draggable();
                 iframe_wrapper = document.getElementById("iframe-wrapper");
 
                 // Scrolls up to the iframe that is in the leftCol
