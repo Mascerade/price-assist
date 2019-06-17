@@ -40,7 +40,13 @@ chrome.runtime.onMessage.addListener(
                     }
 
                     catch (err) {
-                        price = "Price Not Available";
+                        try {
+                            price = document.getElementById("priceblock_saleprice").textContent;
+                        }
+
+                        catch(err) {
+                            price = "Price Not Available";
+                        }
                     }
                 }
                 // Defines both the item_model and the rows containing the item model (product description)
