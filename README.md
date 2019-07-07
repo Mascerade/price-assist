@@ -1,6 +1,16 @@
-# PriceCheccer-Extension
+# Price Assist
 
-Have you ever been on Amazon and thought, "Man, I wish I could see the prices from other retailers before I buy this."
-No need to worry anymore with PriceCheccer! PriceCheccer automagically scrapes the same product that you are viewing on Amazon
-on other major electronic retailers (Newegg, Walmart etc) and displays it in a clean, minimalistic GUI that is, again,
-automagically displayed on Amazon.
+A Chrome Extension that allows the user to find consumer electronics more easily. Used in conjunction with the Price Assist API in order to fetch data.
+
+# Goals of the Price Assist Extension
+
+* Create a GUI that allows the user to see the prices of the same product on different retailers. 
+* Easy to use and navigate
+* Unobstrusive
+
+# APIs and Frameworks Used
+
+* **Price Assist API** - Used to fetch data about products from other retailers
+* **Bootstrap** - Easy way to layout GUI elements
+* **JSON 5** - Used to parse JSON coming from Price Assist API
+* **Jquery** - Used to manipulate elements in the GUI
