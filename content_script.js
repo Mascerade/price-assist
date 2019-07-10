@@ -26,7 +26,25 @@ chrome.runtime.onMessage.addListener(
 
         // Checks if the background_script sent a message to Check Electronics
         if(request.status === "Check Electronics") {
-            if(document.getElementsByClassName("nav-search-label")[0].textContent === "Electronics") {
+            let check = false;
+            let topics = document.getElementsByClassName("a-link-normal a-color-tertiary");
+            let category = document.getElementsByClassName("nav-search-label")[0].textContent;
+
+            console.log(category);
+            if (category == "Electronics" || "Computers") {
+                check = true;
+            }
+            
+            if (!check) {
+                for (let i = 0; i < topics.length; i++) {
+                    console.log(topics[i].textContent.replace(/\s/g, ""));
+                    if (topics[i].textContent.replace(/\s/g, "") == "Electronics") {
+                        check = true;
+                    }
+                }
+            }
+
+            if(check) {
                 let price;
                 try {
                     // Gets the price
@@ -41,11 +59,17 @@ chrome.runtime.onMessage.addListener(
 
                     catch (err) {
                         try {
-                            price = document.getElementById("priceblock_saleprice").textContent;
+                            price = document.getElementById("priceblock_saleprice").textContent;    
                         }
 
                         catch(err) {
-                            price = "Price Not Available";
+                            try {
+                                price = document.getElementById("availability").textContent;
+                            }
+                            
+                            catch(err) {
+                                price = "Price Not Available";
+                            }
                         }
                     }
                 }
@@ -65,6 +89,7 @@ chrome.runtime.onMessage.addListener(
                 // Sets the internal check to "Display"
                 internal_check = "Display";
                 // If it is, send message back to background_script to Get Data
+                console.log(price);
                 sendResponse({status: "Get data", price: price, item_model: item_model});
             }
 
