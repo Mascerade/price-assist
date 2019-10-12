@@ -12,7 +12,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 if(response.status == "Get data") {
                     const http = new XMLHttpRequest(); // Defines the Http request
                     let localserver = "localhost:5000"
-                    let timelessServer = "timeless-apps:5000" 
+                    let timelessServer = "timeless-apps.com" 
                     let url = "http://" + timelessServer + "/api/query?retailer=" + retailer + "&price=" + response.price + "&item_model=" + response.item_model + "&return_type=gui";
                     //let url = "http://192.168.0.177:5000/api/query?retailer=" + retailer + "&price=" + response.price + "&item_model=" + response.item_model + "&return_type=gui";
                     http.open("GET", url); // Sets the request to a GET request
