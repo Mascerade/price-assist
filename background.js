@@ -11,9 +11,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 // If the tab is on Electronics, content_script sends response to get data from server
                 if(response.status == "Get data") {
                     const http = new XMLHttpRequest(); // Defines the Http request
-                    let localserver = "localhost:5000"
+                    let localserver = "10.0.0.191:5000"
                     let timelessServer = "timeless-apps.com"
-                    let url = "http://" + timelessServer + "/api/query?retailer=" + retailer + "&price=" + response.price + "&item_model=" + response.item_model + "&return_type=gui";
+                    let url = "http://" + localserver + "/api/query?retailer=" + retailer +
+                    "&price=" + response.price + "&item_model=" + response.item_model + "&title=" + response.title + "&return_type=gui";
                     // let url = "http://localhost:5000/api/query?retailer=" + retailer + "&price=" + response.price + "&item_model=" + response.item_model + "&return_type=gui";
                     http.open("GET", url); // Sets the request to a GET request
                     http.send(); // Sends the request to the server

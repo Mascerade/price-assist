@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(
             if (category == "Electronics" || "Computers") {
                 check = true;
             }
-            
+
             if (!check) {
                 for (let i = 0; i < topics.length; i++) {
                     console.log(topics[i].textContent.replace(/\s/g, ""));
@@ -59,14 +59,14 @@ chrome.runtime.onMessage.addListener(
 
                     catch (err) {
                         try {
-                            price = document.getElementById("priceblock_saleprice").textContent;    
+                            price = document.getElementById("priceblock_saleprice").textContent;
                         }
 
                         catch(err) {
                             try {
                                 price = document.getElementById("availability").textContent;
                             }
-                            
+
                             catch(err) {
                                 price = "Price Not Available";
                             }
@@ -86,11 +86,14 @@ chrome.runtime.onMessage.addListener(
                 // Gets rid of the whitespace of the item_model
                 item_model = item_model.replace(/\s/g, "");
 
+                // Now, we have to get the title of the product
+                let productTitle = document.getElementById("productTitle").textContent.trim(" ");
+
                 // Sets the internal check to "Display"
                 internal_check = "Display";
                 // If it is, send message back to background_script to Get Data
-                console.log(price);
-                sendResponse({status: "Get data", price: price, item_model: item_model});
+                console.log(productTitle);
+                sendResponse({status: "Get data", price: price, item_model: item_model, title: productTitle});
             }
 
             else {
