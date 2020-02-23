@@ -80,7 +80,6 @@ port.onMessage.addListener(function(message) {
 
 
     if (message.message == "add gui") {
-
         // Allows you to use jquery
         $(document).ready(function() {
 
@@ -110,8 +109,17 @@ port.onMessage.addListener(function(message) {
 
             // For when the url changes on the same amazon page; Makes sure there is only 1 gui
             internal_display_count += 1;
+
+            port.postMessage({message: "add process scrapers"})
         });
         // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
         internal_check = "DO NOTHING";
     }
+
+    if (message.message == "add process scrapers") {
+        console.log("got message from process scrapers")
+        console.log(message.body)
+        document.getElementById("card-contianer").innerHTML += message.body;
+    }
+
 });
