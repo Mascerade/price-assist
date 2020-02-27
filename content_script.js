@@ -7,20 +7,17 @@ var iframe_wrapper; // Makes the global iframe_wrapper
 let port = chrome.runtime.connect({name:"cs-port"});
 
 url = window.location.toString();
-console.log(url)
 if (url.includes("www.amazon.com") && (url.includes("dp") || url.includes("gp"))) {
     port.postMessage({message: "put retailer", retailer: "Amazon"})
 }
 
 port.onMessage.addListener(function(message) {
     if (message.message == "get info") {
-        console.log('hereee')
         var check = false;
         let topics = document.getElementsByClassName("a-link-normal a-color-tertiary");
         let category = document.getElementsByClassName("nav-search-label")[0].textContent;
 
         if (category == "Electronics" || category == "Computers" || category == "All") {
-            console.log("herwewkljklwejrkljwklsjdlfjdsklfjklsajklfdjsklfj")
             check = true;
         }
 
@@ -70,7 +67,6 @@ port.onMessage.addListener(function(message) {
             let productTitle = document.getElementById("productTitle").textContent.trim(" ");
 
             // If it is, send message back to background_script to Get Data
-            console.log(productTitle);
 
             internal_check += 0;
              // Send message to send request to timeless apps
@@ -92,7 +88,6 @@ port.onMessage.addListener(function(message) {
             document.getElementById("image-canvas-caption").innerHTML += message.iframe;
 
             // Insert the html from the server in necessary places
-            console.log(message);
             $("iframe").contents().find("head").html(message.head);
             $("iframe").contents().find("body").html(message.body);
 
@@ -109,7 +104,7 @@ port.onMessage.addListener(function(message) {
 
             // For when the url changes on the same amazon page; Makes sure there is only 1 gui
             internal_display_count += 1;
-
+            console.log("added the gui")
             port.postMessage({message: "add process scrapers"})
         });
         // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
@@ -118,8 +113,8 @@ port.onMessage.addListener(function(message) {
 
     if (message.message == "add process scrapers") {
         console.log("got message from process scrapers")
-        console.log(message.body)
-        document.getElementById("card-contianer").innerHTML += message.body;
+        console.log(document.getElementById("iframe"));
+        document.getElementById("iframe").contentWindow.document.getElementById("card-container").innerHTML += message.body;
     }
 
 });

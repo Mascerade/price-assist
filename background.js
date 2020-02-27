@@ -1,7 +1,8 @@
 let portFromCS;
 var retailer = "";
-let processScrapersData;
 let networkScrapersDone = false;
+let processData;
+let processScrapersDone = false;
 chrome.runtime.onConnect.addListener(connected)
 
 
@@ -19,11 +20,11 @@ function connected(p) {
             const processScrapers = new XMLHttpRequest()
             const localserver = "localhost:5000";
             const timlessServer = "timeless-apps.com"
-            
+
             const url1 = "http://" + localserver + "/price-assist/api/network-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&title=" +
             message.title + "&return_type=gui";
-            
+
             const url2 = "http://" + localserver + "/price-assist/api/process-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&title=" +
             message.title + "&return_type=gui";
@@ -44,7 +45,6 @@ function connected(p) {
 
                 else {
                     portFromCS.postMessage({message: "add gui", iframe: data.iframe, head: data.head, body: data.body})
-                    networkScrapersDone = true;
                 }
             }
 
@@ -57,8 +57,25 @@ function connected(p) {
                 }
 
                 else {
-                    portFromCS.postMessage({message: "add process scrapers", body: processData.body})
+                    console.log(networkScrapersDone)
+                    if (networkScrapersDone) {
+                        portFromCS.postMessage({message: "add process scrapers", body: processData.body})
+                    }
+
+                    else {
+                        processScrapersDone = true
+                    }
                 }
+            }
+        }
+
+        if (message.message == "add process scrapers") {
+            console.log("from outside of add process scrapers", processScrapersDone)
+            networkScrapersDone = true
+            if (processScrapersDone) {
+                console.log("from add process scrapers")
+                console.log(processData.body)
+                portFromCS.postMessage({message: "add process scrapers", body: processData.body})
             }
         }
     });
