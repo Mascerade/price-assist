@@ -114,8 +114,19 @@ port.onMessage.addListener(function(message) {
 
     if (message.message == "add process scrapers") {
         console.log("got message from process scrapers")
-        console.log(document.getElementById("iframe"));
         document.getElementById("iframe").contentWindow.document.getElementById("card-container").innerHTML += message.body;
+    }
+
+    if (message.message == "change visibility") {
+        console.log("change visiblity")
+        visibility = document.getElementById("iframe-wrapper").style.visibility;
+        if (visibility == "visible") {
+            document.getElementById("iframe-wrapper").style.setProperty("visibility", "hidden");
+        }
+
+        else {
+            document.getElementById("iframe-wrapper").style.setProperty("visibility", "visible");
+        }
     }
 
 });
