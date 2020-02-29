@@ -8,6 +8,7 @@ let port = chrome.runtime.connect({name:"cs-port"});
 
 url = window.location.toString();
 if (url.includes("www.amazon.com") && (url.includes("dp") || url.includes("gp"))) {
+    console.log(url)
     port.postMessage({message: "put retailer", retailer: "Amazon"})
 }
 
