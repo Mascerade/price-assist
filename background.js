@@ -24,13 +24,13 @@ function connected(p) {
             const networkScrapers = new XMLHttpRequest()
             const processScrapers = new XMLHttpRequest()
             const localserver = "localhost:5000";
-            const timlessServer = "timeless-apps.com"
+            const timelessServer = "timeless-apps.com:5000"
 
-            const url1 = "http://" + localserver + "/price-assist/api/network-scrapers" +
+            const url1 = "http://" + timelessServer + "/price-assist/api/network-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" + message.price +
             "&title=" + message.title + "&return_type=gui";
 
-            const url2 = "http://" + localserver + "/price-assist/api/process-scrapers" +
+            const url2 = "http://" + timelessServer + "/price-assist/api/process-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" +
             message.price + "&title=" + message.title + "&return_type=gui";
 
