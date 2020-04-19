@@ -4,9 +4,9 @@ A Chrome Extension that allows the user to find consumer electronics more easily
 
 # Goals of the Price Assist Extension
 
-* Create a GUI that allows the user to see the prices of the same product on different retailers. 
+* Create a GUI that allows the user to see the prices of the same product on different retailers.
 * Easy to use and navigate
-* Unobstrusive
+* Unobtrusive
 
 # APIs and Frameworks Used
 
