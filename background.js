@@ -23,17 +23,18 @@ function connected(p) {
             // data from the network scrapers and process scrapers
             const networkScrapers = new XMLHttpRequest()
             const processScrapers = new XMLHttpRequest()
-            const localserver = "localhost:5000";
+            const localServer = "localhost:5000";
             const timelessServer = "timeless-apps.com:5000"
 
-            const url1 = "http://" + timelessServer + "/price-assist/api/network-scrapers" +
+            const url1 = "http://" + localServer + "/price-assist/api/network-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" + message.price +
-            "&title=" + message.title + "&return_type=gui";
+            "&title=" + message.title + "&return_type=json";
 
-            const url2 = "http://" + timelessServer + "/price-assist/api/process-scrapers" +
+            const url2 = "http://" + localServer + "/price-assist/api/process-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" +
-            message.price + "&title=" + message.title + "&return_type=gui";
+            message.price + "&title=" + message.title + "&return_type=json";
 
+            portFromCS.postMessage({message: "add gui"})
             networkScrapers.open("GET", url1)
             processScrapers.open("GET", url2)
             networkScrapers.send()
@@ -43,14 +44,13 @@ function connected(p) {
                 // When the request to the server is done, process the data here
                 console.log("here in network")
                 send = true; // Checks if we should send a message to display the results
-                data = JSON5.parse(networkScrapers.responseText);
+                networkData = JSON5.parse(networkScrapers.responseText);
                 if (networkScrapers.responseText.includes("Error")) {
                     send = false;
                 }
 
                 else {
-                    console.log(data.body)
-                    portFromCS.postMessage({message: "add gui", iframe: data.iframe, head: data.head, body: data.body})
+                    portFromCS.postMessage({message: "add data", data: networkData})
                 }
             }
 
@@ -64,15 +64,7 @@ function connected(p) {
                 }
 
                 else {
-                    console.log(networkScrapersDone)
-                    if (networkScrapersDone) {
-                        console.log(processData.body)
-                        portFromCS.postMessage({message: "add process scrapers", body: processData.body})
-                    }
-
-                    else {
-                        processScrapersDone = true
-                    }
+                    portFromCS.postMessage({message: "add data", data: processData})
                 }
             }
         }

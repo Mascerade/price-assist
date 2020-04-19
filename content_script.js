@@ -3,6 +3,47 @@ var internal_display_count = 0; // Makes sure that only 1 gui will every be show
 var iframe; // Makes the global iframe variable
 var iframe_wrapper; // Makes the global iframe_wrapper
 
+var headElements = `
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Assist GUI<\/title>
+    <link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https:\/\/use.fontawesome.com\/releases\/v5.3.1\/css\/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https:\/\/dl.dropbox.com\/s\/dffi0ovzjw5yhci\/price-assist.css">
+
+    <link href="https:\/\/fonts.googleapis.com\/css2?family=Muli:wght@200;300&family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
+`
+var bodyElements = `
+<div id="price-assist-wrapper">
+    <div id="price-assist-heading">
+        <a href="http:\/\/www.timeless-apps.com\/" target="_blank"><img id="price-assist-logo" src="https:\/\/dl.dropbox.com\/s\/7vleowye5psd2mj\/only_logo_transparent_white.png?raw=0" alt="Logo"><\/a>
+        <h3>Price Assist<\/h3>
+        <i class="material-icons pb-close" id="price-assist-close-icon">close<\/i>
+    <\/div>
+
+    <div id="price-assist-content">
+      <div class="price-assist-card" v-for="retailer in retailerData">
+          <div class="price-assist-inner-card">
+              <p class="price-assist-title">{{retailer[0]}}<\/p>
+              <div class="price-assist-price-img-container">
+                  <p class="price-assist-price">Price: $ {{retailer[1]}}<\/p>
+                  <img class="price-assist-price-money-img" src="https:\/\/dl.dropbox.com\/s\/mcck683ko4gniuo\/money_stack.png?dl=0" alt="Money">
+              <\/div>
+              <a class="price-assist-product-button" :href="retailer[2]" target="_blank">Product 💰<\/a>
+          <\/div>
+          <hr class="price-assist-hr">
+        <\/div>
+    <\/div>
+
+    <footer id="price-assist-footer">
+      <a target="_blank" href="http:\/\/www.timeless-apps\/track-prices\/index.html">Track Prices<\/a>
+        <p>|<\/p>
+        <a href="">Save Product<\/a>
+    <\/footer>
+<\/div>
+`
+var myscript;
+var vue;
 
 let port = chrome.runtime.connect({name:"cs-port"});
 
@@ -77,48 +118,51 @@ port.onMessage.addListener(function(message) {
 
 
     if (message.message == "add gui") {
-        // Allows you to use jquery
-        $(document).ready(function() {
+        // This is to remove the "old" iframe and replace it with the new one generated
+        if(internal_display_count >= 1) {
+            document.getElementById("price-assist-wrapper").remove();
+        }
 
-            // This is to remove the "old" iframe and replace it with the new one generated
-            if(internal_display_count >= 1) {
-                document.getElementById("iframe-wrapper").remove();
-            }
+        // Put iframe where the left column is
+        var priceAssistContainer = document.createElement('div');
+        priceAssistContainer.id = "price-assist-container"
+        priceAssistContainer.innerHTML = bodyElements
+        document.getElementsByTagName('head')[0].innerHTML += headElements;
+        document.getElementById('imageBlock_feature_div').appendChild(priceAssistContainer);
+        vue = document.createElement("script");
+        myScript = document.createElement("script");
+        vue.src = "https:\/\/cdn.jsdelivr.net\/npm\/vue\/dist\/vue.js";
+        myScript.src = "https:\/\/dl.dropbox.com\/s\/zvmy6kfsj8d719f\/script.js?dl=0";
+        document.getElementsByTagName("head")[0].appendChild(vue);
+        document.getElementsByTagName("head")[0].append(myScript);
 
-            // Put iframe where the left column is
-            document.getElementById("image-canvas-caption").innerHTML += message.iframe;
-
-            // Insert the html from the server in necessary places
-            $("iframe").contents().find("head").html(message.head);
-            $("iframe").contents().find("body").html(message.body);
-
-            // If the "X" is clicked, make it hidden
-            $("iframe").contents().find("#close-button").click(function() {
-                iframe_wrapper.style.setProperty("visibility", "hidden");
-            });
-
-            iframe_wrapper = document.getElementById("iframe-wrapper");
-
-            // Scrolls up to the iframe that is in the leftCol
-            var top_of_iframe = $("#iframe-wrapper").position().top;
-            window.scrollTo({top: top_of_iframe - (top_of_iframe * 0.1), left: 0, behavior: "smooth"});
-
-            // For when the url changes on the same amazon page; Makes sure there is only 1 gui
-            internal_display_count += 1;
-            console.log("added the gui")
-            port.postMessage({message: "add process scrapers"})
-        });
         // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
         internal_check = "DO NOTHING";
     }
 
+    if (message.message == "add data") {
+        let script = document.createElement('script');
+        for(const [key, value] of Object.entries(message.data)) {
+            if ((value[1] == null) || (value[2] == null) || (key == "identifier") || (key == "title")) {
+
+            }
+            else {
+                let pushData = "['" + value[0] + "', '" + value[1] + "', '" + value[2] + "']"
+                script.textContent += "window.app.retailerData.push("+ pushData +");";
+            }
+        }
+        myScript.addEventListener('load', function() {
+            document.getElementsByTagName("head")[0].appendChild(script);
+        })
+    }
+
     if (message.message == "add process scrapers") {
-        console.log("got message from process scrapers")
+        console.log("got message from process scrapers");
         document.getElementById("iframe").contentWindow.document.getElementById("card-container").innerHTML += message.body;
     }
 
     if (message.message == "change visibility") {
-        console.log("change visiblity")
+        console.log("change visiblity");
         visibility = document.getElementById("iframe-wrapper").style.visibility;
         if (visibility == "visible") {
             document.getElementById("iframe-wrapper").style.setProperty("visibility", "hidden");
