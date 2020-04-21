@@ -68,18 +68,6 @@ function connected(p) {
                 }
             }
         }
-
-        if (message.message == "add process scrapers") {
-            // This is for when the process scrapers finishes its requests
-            // Before the network scraper request finishes
-            console.log("from outside of add process scrapers", processScrapersDone)
-            networkScrapersDone = true
-            if (processScrapersDone) {
-                console.log("from add process scrapers")
-                console.log(processData.body)
-                portFromCS.postMessage({message: "add process scrapers", body: processData.body})
-            }
-        }
     });
 }
 
