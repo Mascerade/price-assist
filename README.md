@@ -10,7 +10,6 @@ A Chrome Extension that allows the user to find consumer electronics more easily
 
 # APIs and Frameworks Used
 
-* **Price Assist API** - Used to fetch data about products from other retailers
-* **Bootstrap** - Easy way to layout GUI elements
-* **JSON 5** - Used to parse JSON coming from Price Assist API
-* **Jquery** - Used to manipulate elements in the GUI
+* **Price Assist API** - Used to fetch data about products from other retailers.
+* **JSON 5** - Used to parse JSON coming from Price Assist API.
+* **Track Prices** - Used to make sure you can check the price of the product compared to recent prices.

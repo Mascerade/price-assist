@@ -16,8 +16,7 @@
     ],
 
     "web_accessible_resources": [
-        "dependencies/json5.min.js",
-        "dependencies/jquery-ui.min.js"
+        "dependencies/json5.min.js"
     ],
 
     "background": {
@@ -28,7 +27,7 @@
     "content_scripts": [
       {
         "matches": ["https://www.amazon.com/*"],
-        "js": ["content_script.js", "dependencies/jquery.min.js", "dependencies/json5.min.js", "dependencies/jquery-ui.min.js"],
+        "js": ["content_script.js","dependencies/json5.min.js"],
         "all_frames": false
       }
     ]
