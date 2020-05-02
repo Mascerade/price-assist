@@ -13,7 +13,7 @@ var headElements = `
     <link rel="stylesheet" href="https:\/\/dl.dropbox.com\/s\/dffi0ovzjw5yhci\/price-assist.css">
 
     <link href="https:\/\/fonts.googleapis.com\/css2?family=Muli:wght@200;300&family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
-`
+`;
 
 // The body of Price Assist
 var bodyElements = `
@@ -44,7 +44,8 @@ var bodyElements = `
         <a href="">Save Product<\/a>
     <\/footer>
 <\/div>
-`
+`;
+
 var myscript;
 var vue;
 
@@ -52,12 +53,13 @@ let port = chrome.runtime.connect({name:"cs-port"});
 
 url = window.location.toString();
 if (url.includes("www.amazon.com") && (url.includes("dp") || url.includes("gp"))) {
-    console.log(url)
-    port.postMessage({message: "put retailer", retailer: "Amazon"})
+    console.log(url);
+    port.postMessage({message: "put retailer", retailer: "Amazon"});
 }
 
 port.onMessage.addListener(function(message) {
     if (message.message == "get info") {
+        // Category used to determine if we should use Price Assist on the page
         var check = false;
         let topics = document.getElementsByClassName("a-link-normal a-color-tertiary");
         let category = document.getElementsByClassName("nav-search-label")[0].textContent;
@@ -66,7 +68,9 @@ port.onMessage.addListener(function(message) {
             check = true;
         }
 
+        
         if(check) {
+            // The price can appear under multiple id's
             let price;
             try {
                 // Gets the price
@@ -95,6 +99,10 @@ port.onMessage.addListener(function(message) {
                     }
                 }
             }
+            // Gets the image source
+            let img_source = document.getElementById("landingImage").src;
+            console.log(img_source);
+
             // Defines both the item_model and the rows containing the item model (product description)
             let item_model;
             let row_content = document.getElementsByClassName("a-size-base");
@@ -115,7 +123,7 @@ port.onMessage.addListener(function(message) {
 
             internal_check += 0;
              // Send message to send request to timeless apps
-            port.postMessage({message: "send request", item_model: item_model, price: price, title: productTitle});
+            port.postMessage({message: "send request", item_model: item_model, price: price, title: productTitle, img_source: img_source});
         }
     }
 
@@ -128,10 +136,10 @@ port.onMessage.addListener(function(message) {
 
         // The container for the Price Assist GUI
         var priceAssistContainer = document.createElement('div');
-        priceAssistContainer.id = "price-assist-container"
+        priceAssistContainer.id = "price-assist-container";
 
         // Add the body to the container
-        priceAssistContainer.innerHTML = bodyElements
+        priceAssistContainer.innerHTML = bodyElements;
 
         // Add the head to the head of the website in order
         document.getElementsByTagName('head')[0].innerHTML += headElements;
@@ -167,7 +175,7 @@ port.onMessage.addListener(function(message) {
             }
             else {
                 // Format to append to the reatilerData list
-                let pushData = "['" + value[0] + "', '" + value[1] + "', '" + value[2] + "']"
+                let pushData = "['" + value[0] + "', '" + value[1] + "', '" + value[2] + "']";
                 script.textContent += "window.app.retailerData.push("+ pushData +");";
             }
         }
