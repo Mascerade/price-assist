@@ -49,6 +49,7 @@ var bodyElements = `
 var myscript;
 var vue;
 
+var vueScriptLoaded = false;
 let port = chrome.runtime.connect({name:"cs-port"});
 
 url = window.location.toString();
@@ -166,6 +167,7 @@ port.onMessage.addListener(function(message) {
         // the script element is injected into the website which will
         // execute the script in it
         let script = document.createElement('script');
+        let scriptLoaded = false;
 
         // Iterate through the keys and values in data
         for(const [key, value] of Object.entries(message.data)) {
@@ -177,6 +179,7 @@ port.onMessage.addListener(function(message) {
                 // Format to append to the reatilerData list
                 let pushData = "['" + value[0] + "', '" + value[1] + "', '" + value[2] + "']";
                 script.textContent += "window.app.retailerData.push("+ pushData +");";
+                console.log(pushData);
             }
         }
 
@@ -184,7 +187,15 @@ port.onMessage.addListener(function(message) {
         // instance to load before appending this custom script
         myScript.addEventListener('load', function() {
             document.getElementsByTagName("head")[0].appendChild(script);
-        })
+            scriptLoaded = true;
+            vueScriptLoaded = true;
+            console.log('vue script loaded');
+        });
+
+        if (!scriptLoaded && vueScriptLoaded) {
+            document.getElementsByTagName("head")[0].appendChild(script);
+            console.log('actual script loaded');
+        }
     }
 
     if (message.message == "change visibility") {
