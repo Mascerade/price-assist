@@ -148,15 +148,22 @@ port.onMessage.addListener(function(message) {
         // Put GUI where the left column is
         document.getElementById('imageBlock_feature_div').appendChild(priceAssistContainer);
 
+
         // Must create script elements for the script I made and vue
         vue = document.createElement("script");
         myScript = document.createElement("script");
-        vue.src = "https:\/\/cdn.jsdelivr.net\/npm\/vue\/dist\/vue.js";
-        myScript.src = "https:\/\/dl.dropbox.com\/s\/zvmy6kfsj8d719f\/script.js?dl=0";
 
         // Add the scripts to the head to begin loading them
         document.getElementsByTagName("head")[0].appendChild(vue);
         document.getElementsByTagName("head")[0].append(myScript);
+
+        myScript.onload = function () {
+            vueScriptLoaded = true
+        }
+
+        vue.src = "https:\/\/cdn.jsdelivr.net\/npm\/vue\/dist\/vue.js";
+        myScript.src = "https:\/\/dl.dropbox.com\/s\/zvmy6kfsj8d719f\/script.js?dl=0";
+
 
         // VERY IMPORTANT: Sets the internal_check to "DO NOTHING" so that the if statement will fail
         internal_check = "DO NOTHING";

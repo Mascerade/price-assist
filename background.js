@@ -27,11 +27,11 @@ function connected(p) {
             const timelessServer = "timeless-apps.com:5000";
             const piDevServer = "10.0.0.203:5000";
 
-            const url1 = "http://" + piDevServer + "/price-assist/api/network-scrapers" +
+            const url1 = "http://" + localServer + "/price-assist/api/network-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" + message.price +
             "&title=" + message.title + "&image=" + message.img_source + "&return_type=json";
 
-            const url2 = "http://" + piDevServer + "/price-assist/api/process-scrapers" +
+            const url2 = "http://" + localServer + "/price-assist/api/process-scrapers" +
             "?retailer=" + retailer + "&item_model=" + message.item_model + "&price=" +
             message.price + "&title=" + message.title + "&return_type=json";
 
