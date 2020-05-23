@@ -28,6 +28,8 @@ export default {};
 #price-assist-heading {
   display: flex;
   font-family: 'Muli';
+  font-style: normal;
+  font-weight: 200;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   flex-flow: row;

@@ -6,7 +6,7 @@ div.id = 'price-assist';
 document.getElementById('main').appendChild(div);
 
 /* eslint-disable no-new */
-new Vue({
+var app = new Vue({
   el: '#price-assist',
   render: h => {
     return h(Content);

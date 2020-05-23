@@ -2,12 +2,14 @@
   <div id="price-assist-wrapper">
     <pa-content-header />
     <pa-retailers-container :retailerData="retailerData" />
+    <pa-footer />
   </div>
 </template>
 
 <script>
 import ContentHeader from './ContentHeader';
 import RetailersContainer from './RetailersContainer';
+import Footer from './Footer';
 export default {
   data() {
     return {
@@ -27,12 +29,18 @@ export default {
           price: 519.99,
           link: 'https://www.walmart.com/',
         },
+        {
+          title: 'BestBuy',
+          price: 509.99,
+          link: 'https://www.bestbuy.com/',
+        },
       ],
     };
   },
   components: {
     'pa-content-header': ContentHeader,
     'pa-retailers-container': RetailersContainer,
+    'pa-footer': Footer,
   },
 };
 </script>
