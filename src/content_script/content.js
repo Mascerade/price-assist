@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Content from './ContentApp';
+import { getData } from './eventBus'
 
 const div = document.createElement('div');
 div.id = 'price-assist';
@@ -12,3 +13,5 @@ var app = new Vue({
     return h(Content);
   },
 });
+
+getData();
