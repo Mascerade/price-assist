@@ -3,7 +3,7 @@
     <div class="price-assist-inner-card">
       <p class="price-assist-title">{{ retailer['title'] }}</p>
       <div class="price-assist-price-img-container">
-        <p class="price-assist-price">Price: $ {{ retailer['price'] }}</p>
+        <p class="price-assist-price">Price: ${{ retailer['price'] }}</p>
         <img class="price-assist-price-money-img" src="https://dl.dropbox.com/s/mcck683ko4gniuo/money_stack.png?dl=0" alt="Money" />
       </div>
       <a class="price-assist-product-button" :href="retailer['link']" target="_blank">Product 💰</a>
