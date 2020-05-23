@@ -23,5 +23,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
+@import url('../styles/typeface-quicksand.css');
+@import url('../styles/typeface-muli.css');
 </style>

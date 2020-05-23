@@ -3,7 +3,7 @@ import Content from './ContentApp';
 
 const div = document.createElement('div');
 div.id = 'price-assist';
-document.body.insertBefore(div, document.body.firstChild);
+document.getElementById('main').appendChild(div);
 
 /* eslint-disable no-new */
 new Vue({

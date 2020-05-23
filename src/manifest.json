@@ -17,7 +17,7 @@
     ]
   },
   "web_accessible_resources": [
-    "fonts/_/node_modules/typeface-quicksand/files/*"
+    "fonts/_/node_modules/*"
   ],
   "content_scripts": [
     {
