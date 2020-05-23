@@ -16,13 +16,18 @@
       "background.js"
     ]
   },
+  "web_accessible_resources": [
+    "fonts/_/node_modules/typeface-quicksand/files/*"
+  ],
   "content_scripts": [
     {
       "matches": [
         "https://www.google.com/"
       ],
       "js": ["content_script/content.js"],
-      "css": ["content_script/content.css"]
+      "css": [
+        "content_script/content.css"
+      ]
     }
   ],
   "options_ui": {
