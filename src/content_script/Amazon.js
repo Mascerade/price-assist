@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-
+var BreakException = {};
 class Amazon {
   constructor() {
     this.category;
@@ -7,10 +7,21 @@ class Amazon {
     this.title;
     this.itemModel;
     this.imgSrc;
+    this.validCategories = ['All', 'Electronics', 'Computers'];
   }
 
   extractCategory() {
-    this.category = document.getElementsByClassName('nav-search-label')[0].textContent;
+    const allOptions = document.getElementsByTagName('option');
+    try {
+      allOptions.forEach(option => {
+        if (option.selected) {
+          this.category = option.textContent.trim();
+          throw BreakException;
+        }
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
   }
 
   extractPrice() {
