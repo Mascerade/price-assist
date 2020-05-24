@@ -35,6 +35,7 @@ class Amazon {
         }
       }
     }
+    this.price = this.price.trim();
   }
 
   extractTitle() {
@@ -53,6 +54,14 @@ class Amazon {
 
   extractImgSrc() {
     this.imgSrc = document.getElementById('landingImage').src;
+  }
+
+  extractAllInfo() {
+    this.extractPrice();
+    this.extractTitle();
+    this.extractItemModel();
+    this.extractImgSrc();
+    console.log(`Price: ${this.price} \nItem Model: ${this.itemModel} \nTitle: ${this.title} \nImage Source: ${this.imgSrc}`);
   }
 }
 
