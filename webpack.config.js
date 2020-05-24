@@ -13,7 +13,7 @@ const config = {
     'background': './background.js',
     'popup/popup': './popup/popup.js',
     'content_script/content': './content_script/content.js',
-    'content_script/eventBus': './content_script/eventBus.js',
+    'content_script/Amazon': './content_script/Amazon.js',
     'options/options': './options/options.js',
   },
   output: {
