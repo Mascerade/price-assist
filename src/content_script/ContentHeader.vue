@@ -4,12 +4,18 @@
       <img id="price-assist-logo" src="https://dl.dropbox.com/s/7vleowye5psd2mj/only_logo_transparent_white.png?raw=0" alt="Logo" />
     </a>
     <h3>Price Assist</h3>
-    <i class="material-icons pb-close" id="price-assist-close-icon">close</i>
+    <img :src="closeImgPath" id="price-assist-close-icon" />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      closeImgPath: 'chrome-extension://ceddafanchjddjpfdchgfddhchigcglo/content_script/images/close.png',
+    };
+  },
+};
 </script>
 
 <style lang="css" scoped>

@@ -17,12 +17,14 @@
     ]
   },
   "web_accessible_resources": [
-    "fonts/_/node_modules/*"
+    "fonts/_/node_modules/*",
+    "content_script/images/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://www.amazon.com/*"
+        "https://www.amazon.com/dp/*",
+        "https://www.amazon.com/*/dp/*"
       ],
       "js": ["content_script/content.js"],
       "css": [

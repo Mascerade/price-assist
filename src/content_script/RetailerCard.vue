@@ -101,3 +101,12 @@ export default {
   height: 1px;
 }
 </style>
+
+<style lang="css" scoped>
+* {
+  all: initial;
+  * {
+    all: unset;
+  }
+}
+</style>

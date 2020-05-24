@@ -52,6 +52,11 @@ export default {
 #price-assist-wrapper {
   height: 500px;
   width: 300px;
+  z-index: 999999999999;
+  background-color: white;
+  position: fixed;
+  top: 25px;
+  right: 25px;
   font-family: 'Muli';
   font-weight: 300;
   border-top-left-radius: 10px;
