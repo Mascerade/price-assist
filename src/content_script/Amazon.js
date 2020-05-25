@@ -11,6 +11,7 @@ class Amazon {
   }
 
   extractCategory() {
+    // Returns the category of the product to check if it is any type of electronic device
     const allOptions = document.getElementsByTagName('option');
     try {
       allOptions.forEach(option => {
@@ -67,7 +68,7 @@ class Amazon {
     this.imgSrc = document.getElementById('landingImage').src;
   }
 
-  extractAllInfo() {
+  extractAllData() {
     this.extractPrice();
     this.extractTitle();
     this.extractItemModel();

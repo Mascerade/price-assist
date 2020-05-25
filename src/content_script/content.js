@@ -9,16 +9,22 @@ const retailerDict = {
   Amazon: amazon,
 };
 
+// Get the name of the retailer so that we know where we should extract data from
 let retailerName;
 const url = window.location.toString();
 if (url.includes('www.amazon.com')) {
   retailerName = 'Amazon';
 }
 
+// Get the actual object for the specific retailer along with the category
 const retailer = retailerDict[retailerName];
 retailer.extractCategory();
+
+// If we support the category, get the necessary data and send it to the background script
+// The background script will actually send the request to the server
 if (retailer.validCategories.includes(retailer.category)) {
-  port.postMessage({ message: 'hi' });
+  retailer.extractAllData();
+  port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc });
 }
 
 const div = document.createElement('div');
