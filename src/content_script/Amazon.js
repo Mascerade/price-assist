@@ -7,7 +7,7 @@ class Amazon {
     this.title;
     this.itemModel;
     this.imgSrc;
-    this.validCategories = ['All', 'Electronics', 'Computers'];
+    this.validCategories = ['All', 'All Departments', 'Electronics', 'Computers'];
   }
 
   extractCategory() {

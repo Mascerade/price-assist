@@ -20,7 +20,6 @@ if (url.includes('www.amazon.com')) {
 // Get the actual object for the specific retailer along with the category
 const retailer = retailerDict[retailerName];
 retailer.extractCategory();
-
 // If we support the category, get the necessary data and send it to the background script
 // The background script will actually send the request to the server
 if (retailer.validCategories.includes(retailer.category)) {

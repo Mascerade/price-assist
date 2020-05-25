@@ -11,6 +11,9 @@ import ContentHeader from './ContentHeader';
 import RetailersContainer from './RetailersContainer';
 import Footer from './Footer';
 import { bus } from './bus';
+import 'typeface-muli';
+import 'typeface-quicksand';
+
 export default {
   data() {
     return {

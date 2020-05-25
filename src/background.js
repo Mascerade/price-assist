@@ -17,7 +17,7 @@ function connected(p) {
 
       const url1 =
         'http://' +
-        piDevServer +
+        localServer +
         '/price-assist/api/network-scrapers' +
         '?retailer=' +
         message.retailer +
@@ -33,7 +33,7 @@ function connected(p) {
 
       const url2 =
         'http://' +
-        piDevServer +
+        localServer +
         '/price-assist/api/process-scrapers' +
         '?retailer=' +
         message.retailer +
