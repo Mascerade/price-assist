@@ -10,6 +10,7 @@
 import ContentHeader from './ContentHeader';
 import RetailersContainer from './RetailersContainer';
 import Footer from './Footer';
+import { bus } from './bus';
 export default {
   data() {
     return {
@@ -36,6 +37,11 @@ export default {
         },
       ],
     };
+  },
+  created() {
+    bus.$on('newRetailerData', retailerData => {
+      console.log(retailerData);
+    });
   },
   components: {
     'pa-content-header': ContentHeader,

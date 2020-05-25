@@ -14,6 +14,7 @@ const config = {
     'popup/popup': './popup/popup.js',
     'content_script/content': './content_script/content.js',
     'content_script/Amazon': './content_script/Amazon.js',
+    'content_script/bus': './content_script/bus.js',
     'options/options': './options/options.js',
   },
   output: {

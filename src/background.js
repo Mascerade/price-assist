@@ -45,7 +45,6 @@ function connected(p) {
         message.title +
         '&return_type=json';
 
-      portFromCS.postMessage({ message: 'add gui' });
       networkScrapers.open('GET', url1);
       processScrapers.open('GET', url2);
       networkScrapers.send();
@@ -55,11 +54,13 @@ function connected(p) {
         // When the request to the server is done, process the data here
         console.log('here in network');
         console.log(networkScrapers.response);
+        portFromCS.postMessage({ message: 'add retailers', data: networkScrapers.response });
       };
 
       processScrapers.onload = e => {
         console.log('here in process');
         console.log(processScrapers.response);
+        portFromCS.postMessage({ message: 'add retailers', data: processScrapers.response });
       };
     }
   });

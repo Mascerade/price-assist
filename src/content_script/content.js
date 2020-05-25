@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Content from './ContentApp';
 import { amazon } from './Amazon';
+import { bus } from './bus';
 
 // First thing to do is to connect to the background script
 const port = chrome.runtime.connect({ name: 'cs-port' });
@@ -41,5 +42,7 @@ new Vue({
 
 // Listens to messages from the background script
 port.onMessage.addListener(message => {
-  console.log(message);
+  if (message.message === 'add retailers') {
+    bus.sendRetailers(message.data);
+  }
 });
