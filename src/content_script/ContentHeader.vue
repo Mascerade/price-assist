@@ -12,7 +12,7 @@
 export default {
   data() {
     return {
-      closeImgPath: 'chrome-extension://ceddafanchjddjpfdchgfddhchigcglo/content_script/images/close.png',
+      closeImgPath: 'chrome-extension://ginjedfmofjnnljikpcgealoahjdifmo/content_script/images/close.png',
     };
   },
 };
