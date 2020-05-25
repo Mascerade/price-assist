@@ -54,13 +54,13 @@ function connected(p) {
         // When the request to the server is done, process the data here
         console.log('here in network');
         console.log(networkScrapers.response);
-        portFromCS.postMessage({ message: 'add retailers', data: networkScrapers.response });
+        portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(networkScrapers.responseText) });
       };
 
       processScrapers.onload = e => {
         console.log('here in process');
         console.log(processScrapers.response);
-        portFromCS.postMessage({ message: 'add retailers', data: processScrapers.response });
+        portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(processScrapers.responseText) });
       };
     }
   });

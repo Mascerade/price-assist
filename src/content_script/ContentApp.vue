@@ -14,33 +14,24 @@ import { bus } from './bus';
 export default {
   data() {
     return {
-      retailerData: [
-        {
-          title: 'Amazon',
-          price: 499.99,
-          link: 'https://www.amazon.com/',
-        },
-        {
-          title: 'Newegg',
-          price: 509.99,
-          link: 'https://www.newegg.com/',
-        },
-        {
-          title: 'Walmart',
-          price: 519.99,
-          link: 'https://www.walmart.com/',
-        },
-        {
-          title: 'BestBuy',
-          price: 509.99,
-          link: 'https://www.bestbuy.com/',
-        },
-      ],
+      retailerData: [],
     };
   },
   created() {
     bus.$on('newRetailerData', retailerData => {
-      console.log(retailerData);
+      console.log('here');
+      for (const [key, value] of Object.entries(retailerData)) {
+        if (value[1] == null || value[2] == null || key === 'identifier' || key === 'title') {
+          console.log(value[0], value[1], value[2]);
+        } else {
+          console.log(value);
+          this.retailerData.push({
+            title: value[0],
+            price: value[1],
+            link: value[2],
+          });
+        }
+      }
     });
   },
   components: {
@@ -58,7 +49,7 @@ export default {
 #price-assist-wrapper {
   height: 500px;
   width: 300px;
-  z-index: 999999999999;
+  z-index: 2147483647;
   background-color: white;
   position: fixed;
   top: 25px;
