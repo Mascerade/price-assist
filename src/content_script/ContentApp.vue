@@ -19,12 +19,9 @@ export default {
   },
   created() {
     bus.$on('newRetailerData', retailerData => {
-      console.log('here');
       for (const [key, value] of Object.entries(retailerData)) {
         if (value[1] == null || value[2] == null || key === 'identifier' || key === 'title') {
-          console.log(value[0], value[1], value[2]);
         } else {
-          console.log(value);
           this.retailerData.push({
             title: value[0],
             price: value[1],
