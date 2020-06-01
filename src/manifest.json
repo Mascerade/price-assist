@@ -1,5 +1,5 @@
 {
-  "name": "vue-price-assist",
+  "name": "Price Assist",
   "description": "Price Assist extension created with Vue.",
   "version": null,
   "key": "ceddafanchjddjpfdchgfddhchigcglo",
@@ -9,7 +9,7 @@
     "128": "icons/icon_128.png"
   },
   "browser_action": {
-    "default_title": "vue-price-assist",
+    "default_title": "Price Assist",
     "default_popup": "popup/popup.html"
   },
   "background": {
@@ -36,5 +36,6 @@
   "options_ui": {
     "page": "options/options.html",
     "chrome_style": true
-  }
+  },
+  "content_security_policy":"script-src 'unsafe-eval' 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'"
 }
