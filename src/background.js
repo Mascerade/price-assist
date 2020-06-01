@@ -1,4 +1,22 @@
 /* eslint-disable no-unused-vars */
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+
+// Create Firebase Configuration
+const firebaseConfig = {
+  apiKey: 'AIzaSyCrRLkjeoTBbhl64pejxogzaRZ3CZWGNl4',
+  authDomain: 'price-assist-1a368.firebaseapp.com',
+  databaseURL: 'https://price-assist-1a368.firebaseio.com',
+  projectId: 'price-assist-1a368',
+  storageBucket: 'price-assist-1a368.appspot.com',
+  messagingSenderId: '845920076305',
+  appId: '1:845920076305:web:ea25f99645ffeaa044a7b0',
+  measurementId: 'G-VB5F70PF1H',
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 let portFromCS;
 global.browser = require('webextension-polyfill');
 
@@ -65,3 +83,7 @@ function connected(p) {
     }
   });
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('here');
+});
