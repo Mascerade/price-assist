@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 // Create Firebase Configuration
 const firebaseConfig = {
@@ -16,6 +17,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Database reference
+var database = firebase.database();
 
 let portFromCS;
 global.browser = require('webextension-polyfill');
@@ -85,18 +89,37 @@ function connected(p) {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then(result => {
-      const token = result.credential.accessToken;
-      const user = result.user;
-    })
-    .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = error.credential;
-    });
+  console.log(request.message);
+  if (request.message === 'sign in') {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(result => {
+        const token = result.credential.accessToken;
+        const user = result.user;
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = error.credential;
+      });
+  } else if (request.message === 'set data') {
+    if (firebase.auth().currentUser != null) {
+      console.log('authenticated!');
+    } else {
+      console.log('unauthenticated!');
+    }
+  } else if (request.message === 'sign out') {
+    firebase
+      .auth()
+      .signOut()
+      .then(function() {
+        console.log('successfully signed out');
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 });

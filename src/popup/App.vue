@@ -1,7 +1,9 @@
 <template>
   <div id="container">
     <p id="sign-in">Sign In with Google</p>
-    <button @click="authenticate" class="btn btn-outline-dark" id="sign-in-button">Sign In!</button>
+    <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
+    <button @click="setData" class="btn btn-outline-dark">Set Data!</button>
+    <button @click="signOut" class="btn btn-outline-dark">Sign Out!</button>
   </div>
 </template>
 
@@ -11,8 +13,14 @@ export default {
     return {};
   },
   methods: {
-    authenticate() {
-      chrome.runtime.sendMessage({ message: 'authenticate' }, function(response) {});
+    signIn() {
+      chrome.runtime.sendMessage({ message: 'sign in' }, function(response) {});
+    },
+    setData() {
+      chrome.runtime.sendMessage({ message: 'set data' }, function(response) {});
+    },
+    signOut() {
+      chrome.runtime.sendMessage({ message: 'sign out' }, function(response) {});
     },
   },
 };
