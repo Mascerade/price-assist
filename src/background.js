@@ -2,6 +2,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+var user;
 
 // Create Firebase Configuration
 const firebaseConfig = {
@@ -97,7 +98,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .signInWithPopup(provider)
       .then(result => {
         const token = result.credential.accessToken;
-        const user = result.user;
+        user = result.user;
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          console.log(idToken);
+          const sendUID = new XMLHttpRequest()
+          sendUID.open('GET', 'http://localhost:5002/test?uid_token=' + idToken)
+          sendUID.send();
+        }).catch(function(error) {
+          // Handle error
+        });
       })
       .catch(error => {
         const errorCode = error.code;
