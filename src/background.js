@@ -4,6 +4,11 @@ import 'firebase/auth';
 import 'firebase/database';
 var user;
 
+// Consts for the different servers
+const localServer = 'localhost';
+const timelessServer = 'timeless-apps.com';
+const piDevServer = '10.0.0.203';
+
 // Create Firebase Configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyCrRLkjeoTBbhl64pejxogzaRZ3CZWGNl4',
@@ -34,14 +39,11 @@ function connected(p) {
     if (message.message === 'get data') {
       const networkScrapers = new XMLHttpRequest();
       const processScrapers = new XMLHttpRequest();
-      const localServer = 'localhost:5000';
-      const timelessServer = 'timeless-apps.com:5000';
-      const piDevServer = '10.0.0.203:5000';
 
       const url1 =
         'http://' +
         piDevServer +
-        '/price-assist/api/network-scrapers' +
+        ':5000/price-assist/api/network-scrapers' +
         '?retailer=' +
         message.retailer +
         '&item_model=' +
@@ -57,7 +59,7 @@ function connected(p) {
       const url2 =
         'http://' +
         piDevServer +
-        '/price-assist/api/process-scrapers' +
+        ':5000/price-assist/api/process-scrapers' +
         '?retailer=' +
         message.retailer +
         '&item_model=' +
@@ -100,12 +102,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const token = result.credential.accessToken;
         user = result.user;
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-          console.log(idToken);
           const sendUID = new XMLHttpRequest()
-          sendUID.open('GET', 'http://localhost:5002/test?uid_token=' + idToken)
+          sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken)
           sendUID.send();
+          sendUID.onload = e => {
+            if (sendUID.status === 404) {
+              createNewUser(idToken)
+            }
+            console.log(sendUID.response, sendUID.status);
+          }
         }).catch(function(error) {
           // Handle error
+          console.log('Error singing in: ', error);
         });
       })
       .catch(error => {
@@ -132,3 +140,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
   }
 });
+
+function createNewUser(idToken) {
+  const postUser = new XMLHttpRequest();
+  postUser.open('POST', 'http://' + localServer + ':5002')
+  postUser.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  postUser.send(JSON.stringify({'uid_token': idToken}))
+  postUser.onload = e => {
+    console.log(postUser.response, postUser.status)
+  }
+}
