@@ -87,6 +87,20 @@ function connected(p) {
         console.log(processScrapers.response);
         portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(processScrapers.responseText) });
       };
+    } else if (message.message === 'save product') {
+      if (firebase.auth().currentUser != null) {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          const sendItemModel = new XMLHttpRequest()
+          sendItemModel.open('PUT', 'http://' + localServer + ':5002')
+          sendItemModel.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          sendItemModel.send(JSON.stringify({'uid_token': idToken, 'item_model': message.itemModel}))
+          sendItemModel.onload = e => {
+            console.log(sendItemModel.response, sendItemModel.status)
+          }
+        })
+      } else {
+        console.log('You must authenticate with Google by clicking on the Chrome Extension icon.')
+      }
     }
   });
 }

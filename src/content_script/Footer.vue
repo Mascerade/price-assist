@@ -2,12 +2,19 @@
   <footer id="price-assist-footer">
     <a target="_blank" href="http://www.timeless-apps/track-prices/index.html">Track Prices</a>
     <p>|</p>
-    <a href="">Save Product</a>
+    <a @click.prevent="saveProduct" href="">Save Product</a>
   </footer>
 </template>
 
 <script>
-export default {};
+import { bus } from './bus'
+export default {
+  methods: {
+    saveProduct() {
+      bus.sendSaveProduct()
+    }
+  }
+};
 </script>
 
 <style lang="css">

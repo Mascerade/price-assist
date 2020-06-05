@@ -6,5 +6,8 @@ export const bus = new Vue({
     sendRetailers(retailerData) {
       this.$emit('newRetailerData', retailerData);
     },
+    sendSaveProduct() {
+      this.$emit('saveProduct');
+    }
   },
 });

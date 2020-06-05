@@ -45,3 +45,7 @@ port.onMessage.addListener(message => {
     bus.sendRetailers(message.data);
   }
 });
+
+bus.$on('saveProduct', () => {
+  port.postMessage({ message: 'save product', itemModel: retailer.itemModel });
+})
