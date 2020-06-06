@@ -2,7 +2,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-var user;
 
 // Consts for the different servers
 const localServer = 'localhost';
@@ -27,6 +26,7 @@ firebase.initializeApp(firebaseConfig);
 // Database reference
 var database = firebase.database();
 
+// This is the port used for the content script communication
 let portFromCS;
 global.browser = require('webextension-polyfill');
 
@@ -37,6 +37,7 @@ function connected(p) {
   portFromCS.onMessage.addListener(message => {
     console.log(message);
     if (message.message === 'get data') {
+      // Make request to the network and process scrapers
       const networkScrapers = new XMLHttpRequest();
       const processScrapers = new XMLHttpRequest();
 
@@ -76,18 +77,20 @@ function connected(p) {
       processScrapers.send();
 
       networkScrapers.onload = e => {
-        // When the request to the server is done, process the data here
+        // After getting the network scrapers, send it to the GUI
         console.log('here in network');
         console.log(networkScrapers.response);
         portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(networkScrapers.responseText) });
       };
 
       processScrapers.onload = e => {
+        // After getting the process scrapers, send it to the GUI
         console.log('here in process');
         console.log(processScrapers.response);
         portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(processScrapers.responseText) });
       };
     } else if (message.message === 'save product') {
+      // Make a PUT request that saves the item model to the user's database
       if (firebase.auth().currentUser != null) {
         firebase
           .auth()
@@ -108,16 +111,19 @@ function connected(p) {
   });
 }
 
+// The chrome messages are used for communcation with the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request.message);
   if (request.message === 'sign in') {
+    // Signs the user through their Google account and also creates
+    // the user in our backend if they do not already exist
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
       .signInWithPopup(provider)
       .then(result => {
         const token = result.credential.accessToken;
-        user = result.user;
+        const user = result.user;
         firebase
           .auth()
           .currentUser.getIdToken(/* forceRefresh */ true)
@@ -126,6 +132,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
             sendUID.send();
             sendUID.onload = e => {
+              // If there was problem getting the data from the user
+              // it means that the user does not exist, so we need to make
+              // a POST request
               if (sendUID.status === 404) {
                 createNewUser(idToken);
               }
@@ -144,12 +153,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const credential = error.credential;
       });
   } else if (request.message === 'set data') {
+    // Used simply to check if a user is signed in
     if (firebase.auth().currentUser != null) {
       console.log('authenticated!');
     } else {
       console.log('unauthenticated!');
     }
   } else if (request.message === 'sign out') {
+    // Simply signs the user out of the application
     firebase
       .auth()
       .signOut()
@@ -163,6 +174,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function createNewUser(idToken) {
+  // Add a user using the uid token
   const postUser = new XMLHttpRequest();
   postUser.open('POST', 'http://' + localServer + ':5002');
   postUser.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
