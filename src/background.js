@@ -89,17 +89,20 @@ function connected(p) {
       };
     } else if (message.message === 'save product') {
       if (firebase.auth().currentUser != null) {
-        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-          const sendItemModel = new XMLHttpRequest()
-          sendItemModel.open('PUT', 'http://' + localServer + ':5002')
-          sendItemModel.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-          sendItemModel.send(JSON.stringify({'uid_token': idToken, 'item_model': message.itemModel}))
-          sendItemModel.onload = e => {
-            console.log(sendItemModel.response, sendItemModel.status)
-          }
-        })
+        firebase
+          .auth()
+          .currentUser.getIdToken(/* forceRefresh */ true)
+          .then(function(idToken) {
+            const sendItemModel = new XMLHttpRequest();
+            sendItemModel.open('PUT', 'http://' + localServer + ':5002');
+            sendItemModel.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            sendItemModel.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }));
+            sendItemModel.onload = e => {
+              console.log(sendItemModel.response, sendItemModel.status);
+            };
+          });
       } else {
-        console.log('You must authenticate with Google by clicking on the Chrome Extension icon.')
+        console.log('You must authenticate with Google by clicking on the Chrome Extension icon.');
       }
     }
   });
@@ -115,20 +118,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(result => {
         const token = result.credential.accessToken;
         user = result.user;
-        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-          const sendUID = new XMLHttpRequest()
-          sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken)
-          sendUID.send();
-          sendUID.onload = e => {
-            if (sendUID.status === 404) {
-              createNewUser(idToken)
-            }
-            console.log(sendUID.response, sendUID.status);
-          }
-        }).catch(function(error) {
-          // Handle error
-          console.log('Error singing in: ', error);
-        });
+        firebase
+          .auth()
+          .currentUser.getIdToken(/* forceRefresh */ true)
+          .then(function(idToken) {
+            const sendUID = new XMLHttpRequest();
+            sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
+            sendUID.send();
+            sendUID.onload = e => {
+              if (sendUID.status === 404) {
+                createNewUser(idToken);
+              }
+              console.log(sendUID.response, sendUID.status);
+            };
+          })
+          .catch(function(error) {
+            // Handle error
+            console.log('Error singing in: ', error);
+          });
       })
       .catch(error => {
         const errorCode = error.code;
@@ -157,10 +164,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function createNewUser(idToken) {
   const postUser = new XMLHttpRequest();
-  postUser.open('POST', 'http://' + localServer + ':5002')
-  postUser.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  postUser.send(JSON.stringify({'uid_token': idToken}))
+  postUser.open('POST', 'http://' + localServer + ':5002');
+  postUser.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  postUser.send(JSON.stringify({ uid_token: idToken }));
   postUser.onload = e => {
-    console.log(postUser.response, postUser.status)
-  }
+    console.log(postUser.response, postUser.status);
+  };
 }
