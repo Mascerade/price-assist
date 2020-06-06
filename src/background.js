@@ -102,12 +102,19 @@ function connected(p) {
             sendItemModel.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }));
             sendItemModel.onload = e => {
               console.log(sendItemModel.response, sendItemModel.status);
+              if (sendItemModel.status === 204) {
+                // Send back the fact that we saved the product
+                portFromCS.postMessage({ message: 'saved product' });
+              } else if (sendItemModel.status === 404) {
+                // Send back the fact that the user is not signed in
+                portFromCS.postMessage({ message: 'need to create account' });
+              }
             };
-            // Send back the fact that we saved the product
-            portFromCS.postMessage({ message: 'saved product' });
           });
       } else {
+        // Send back the fact that the user is not signed in
         console.log('You must authenticate with Google by clicking on the Chrome Extension icon.');
+        portFromCS.postMessage({ message: 'need to create account' });
       }
     }
   });

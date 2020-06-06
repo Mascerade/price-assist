@@ -34,6 +34,14 @@ export default {
         }
       }
     });
+    bus.$on('needAccount', () => {
+      this.$toasted
+        .error('Sign In First!', {
+          icon: 'error',
+          position: 'bottom-center',
+        })
+        .goAway(1200);
+    });
   },
   components: {
     'pa-content-header': ContentHeader,

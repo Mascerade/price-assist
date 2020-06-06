@@ -48,6 +48,8 @@ port.onMessage.addListener(message => {
     bus.sendRetailers(message.data);
   } else if (message.message === 'saved product') {
     bus.sendProductSaved();
+  } else if (message.message === 'need to create account') {
+    bus.sendNeedAccount();
   }
 });
 

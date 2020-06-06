@@ -12,5 +12,8 @@ export const bus = new Vue({
     sendProductSaved() {
       this.$emit('productSaved');
     },
+    sendNeedAccount() {
+      this.$emit('needAccount');
+    },
   },
 });
