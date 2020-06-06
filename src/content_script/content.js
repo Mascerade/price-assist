@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Toasted from 'vue-toasted';
 import Content from './ContentApp';
 import { amazon } from './Amazon';
 import { bus } from './bus';
@@ -31,6 +32,8 @@ const div = document.createElement('div');
 div.id = 'price-assist';
 document.getElementsByTagName('body')[0].appendChild(div);
 
+Vue.use(Toasted);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#price-assist',
@@ -43,6 +46,8 @@ new Vue({
 port.onMessage.addListener(message => {
   if (message.message === 'add retailers') {
     bus.sendRetailers(message.data);
+  } else if (message.message === 'saved product') {
+    bus.sendProductSaved();
   }
 });
 

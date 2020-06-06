@@ -103,6 +103,8 @@ function connected(p) {
             sendItemModel.onload = e => {
               console.log(sendItemModel.response, sendItemModel.status);
             };
+            // Send back the fact that we saved the product
+            portFromCS.postMessage({ message: 'saved product' });
           });
       } else {
         console.log('You must authenticate with Google by clicking on the Chrome Extension icon.');

@@ -1,5 +1,5 @@
 <template>
-  <footer id="price-assist-footer">
+  <footer class="unset" id="price-assist-footer">
     <a target="_blank" href="http://www.timeless-apps/track-prices/index.html">Track Prices</a>
     <p>|</p>
     <a @click.prevent="saveProduct" href="">Save Product</a>
@@ -13,6 +13,17 @@ export default {
     saveProduct() {
       bus.sendSaveProduct();
     },
+  },
+  created() {
+    bus.$on('productSaved', () => {
+      console.log('should make toast');
+      this.$toasted
+        .show('Added Product!', {
+          icon: 'add',
+          position: 'bottom-center',
+        })
+        .goAway(1200);
+    });
   },
 };
 </script>
@@ -33,6 +44,12 @@ export default {
   margin-right: 3%;
   margin-left: 3%;
   padding: 7px;
+  font-family: 'Muli';
+  background-color: #f977ce;
+  background-image: linear-gradient(315deg, #f977ce 0%, #c373f2 74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 #price-assist-footer > p {
@@ -45,12 +62,10 @@ export default {
   font-size: 25px;
 }
 
-#price-assist-footer > a {
-  font-family: 'Muli';
-  background-color: #f977ce;
-  background-image: linear-gradient(315deg, #f977ce 0%, #c373f2 74%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.unset {
+  all: initial;
+  * {
+    all: unset;
+  }
 }
 </style>

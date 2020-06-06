@@ -8,6 +8,9 @@ export const bus = new Vue({
     },
     sendSaveProduct() {
       this.$emit('saveProduct');
-    }
+    },
+    sendProductSaved() {
+      this.$emit('productSaved');
+    },
   },
 });
