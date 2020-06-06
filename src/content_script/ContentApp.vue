@@ -13,6 +13,7 @@ import Footer from './Footer';
 import { bus } from './bus';
 import 'typeface-muli';
 import 'typeface-quicksand';
+import 'material-icons';
 
 export default {
   data() {
@@ -45,6 +46,7 @@ export default {
 <style lang="css" scoped>
 @import url('../styles/typeface-quicksand.css');
 @import url('../styles/typeface-muli.css');
+@import url('../styles/material-icons.css');
 
 #price-assist-wrapper {
   height: 500px;
