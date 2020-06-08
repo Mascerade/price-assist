@@ -7,6 +7,8 @@ import 'firebase/database';
 const localServer = 'localhost';
 const timelessServer = 'timeless-apps.com';
 const piDevServer = '10.0.0.203';
+var currentItemModel;
+const retailerData = {};
 
 // Create Firebase Configuration
 const firebaseConfig = {
@@ -27,7 +29,7 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 // This is the port used for the content script communication
-let portFromCS;
+var portFromCS;
 global.browser = require('webextension-polyfill');
 
 chrome.runtime.onConnect.addListener(connected);
@@ -40,6 +42,9 @@ function connected(p) {
       // Make request to the network and process scrapers
       const networkScrapers = new XMLHttpRequest();
       const processScrapers = new XMLHttpRequest();
+      retailerData.itemModel = message.itemModel;
+      retailerData.retailer = message.retailer;
+      retailerData.price = message.price;
 
       const url1 =
         'http://' +
@@ -104,7 +109,7 @@ function connected(p) {
               console.log(sendItemModel.response, sendItemModel.status);
               if (sendItemModel.status === 204) {
                 // Send back the fact that we saved the product
-                portFromCS.postMessage({ message: 'saved product' });
+                portFromCS.postMessage({ message: 'saved product', onlyToggle: false });
               } else if (sendItemModel.status === 404) {
                 // Send back the fact that the user is not signed in
                 portFromCS.postMessage({ message: 'need to create account' });
@@ -115,6 +120,25 @@ function connected(p) {
         // Send back the fact that the user is not signed in
         console.log('You must authenticate with Google by clicking on the Chrome Extension icon.');
         portFromCS.postMessage({ message: 'need to create account' });
+      }
+    } else if (message.message === 'remove product') {
+      // Make a DELETE request to remove the product from the user
+      if (firebase.auth().currentUser != null) {
+        firebase
+          .auth()
+          .currentUser.getIdToken(/* forceRefresh */ true)
+          .then(function(idToken) {
+            const deleteReq = new XMLHttpRequest();
+            deleteReq.open('DELETE', 'http://' + localServer + ':5002/del_item_model');
+            deleteReq.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            deleteReq.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }));
+            deleteReq.onload = e => {
+              console.log(deleteReq.response, deleteReq.status);
+              if (deleteReq.status === 204) {
+                portFromCS.postMessage({ message: 'removed product' });
+              }
+            };
+          });
       }
     }
   });
@@ -141,10 +165,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
             sendUID.send();
             sendUID.onload = e => {
-              // If there was problem getting the data from the user
-              // it means that the user does not exist, so we need to make
-              // a POST request
-              if (sendUID.status === 404) {
+              if (sendUID.status === 200) {
+                const data = JSON.parse(sendUID.responseText);
+                data.item_models.forEach(itemModel => {
+                  console.log(retailerData.itemModel, itemModel);
+                  if (retailerData.itemModel === itemModel) {
+                    console.log(portFromCS);
+                    portFromCS.postMessage({ message: 'saved product', onlyToggle: true });
+                  }
+                });
+                // If there was problem getting the data from the user
+                // it means that the user does not exist, so we need to make
+                // a POST request
+              } else if (sendUID.status === 404) {
                 createNewUser(idToken);
               }
               console.log(sendUID.response, sendUID.status);

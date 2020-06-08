@@ -2,7 +2,7 @@
   <div id="price-assist-wrapper">
     <pa-content-header />
     <pa-retailers-container :retailerData="retailerData" />
-    <pa-footer />
+    <pa-footer :productSaved="productSaved" />
   </div>
 </template>
 
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       retailerData: [],
+      productSaved: false,
     };
   },
   created() {
@@ -38,6 +39,25 @@ export default {
       this.$toasted
         .error('Sign In First!', {
           icon: 'error',
+          position: 'bottom-center',
+        })
+        .goAway(1200);
+    });
+    bus.$on('productSaved', onlyToggle => {
+      this.productSaved = true;
+      if (!onlyToggle) {
+        this.$toasted
+          .show('Added Product!', {
+            icon: 'add',
+            position: 'bottom-center',
+          })
+          .goAway(1200);
+      }
+    });
+    bus.$on('removedProduct', () => {
+      this.productSaved = false;
+      this.$toasted
+        .show('Removed Product!', {
           position: 'bottom-center',
         })
         .goAway(1200);

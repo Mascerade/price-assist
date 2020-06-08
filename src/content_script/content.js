@@ -47,12 +47,18 @@ port.onMessage.addListener(message => {
   if (message.message === 'add retailers') {
     bus.sendRetailers(message.data);
   } else if (message.message === 'saved product') {
-    bus.sendProductSaved();
+    bus.sendProductSaved(message.onlyToggle);
   } else if (message.message === 'need to create account') {
     bus.sendNeedAccount();
+  } else if (message.message === 'removed product') {
+    bus.sendRemovedProduct();
   }
 });
 
 bus.$on('saveProduct', () => {
   port.postMessage({ message: 'save product', itemModel: retailer.itemModel });
+});
+
+bus.$on('removeProduct', () => {
+  port.postMessage({ message: 'remove product', itemModel: retailer.itemModel });
 });

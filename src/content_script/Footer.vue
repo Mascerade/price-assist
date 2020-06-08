@@ -2,28 +2,22 @@
   <footer class="unset" id="price-assist-footer">
     <a target="_blank" href="http://www.timeless-apps/track-prices/index.html">Track Prices</a>
     <p>|</p>
-    <a @click.prevent="saveProduct" href="">Save Product</a>
+    <a v-if="!productSaved" @click.prevent="saveProduct" href="">Save Product</a>
+    <a v-else @click.prevent="removeProduct" href="">Unsave Product</a>
   </footer>
 </template>
 
 <script>
 import { bus } from './bus';
 export default {
+  props: ['productSaved'],
   methods: {
     saveProduct() {
       bus.sendSaveProduct();
     },
-  },
-  created() {
-    bus.$on('productSaved', () => {
-      console.log('should make toast');
-      this.$toasted
-        .show('Added Product!', {
-          icon: 'add',
-          position: 'bottom-center',
-        })
-        .goAway(1200);
-    });
+    removeProduct() {
+      bus.sendRemoveProduct();
+    },
   },
 };
 </script>

@@ -9,8 +9,14 @@ export const bus = new Vue({
     sendSaveProduct() {
       this.$emit('saveProduct');
     },
-    sendProductSaved() {
-      this.$emit('productSaved');
+    sendProductSaved(onlyToggle) {
+      this.$emit('productSaved', onlyToggle);
+    },
+    sendRemoveProduct() {
+      this.$emit('removeProduct');
+    },
+    sendRemovedProduct() {
+      this.$emit('removedProduct');
     },
     sendNeedAccount() {
       this.$emit('needAccount');
