@@ -6,7 +6,6 @@ import { bus } from './bus';
 
 // First thing to do is to connect to the background script
 const port = chrome.runtime.connect({ name: 'cs-port' });
-
 const retailerDict = {
   Amazon: amazon,
 };

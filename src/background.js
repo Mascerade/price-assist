@@ -45,10 +45,11 @@ function connected(p) {
       retailerData.itemModel = message.itemModel;
       retailerData.retailer = message.retailer;
       retailerData.price = message.price;
+      checkProductSaved();
 
       const url1 =
         'http://' +
-        piDevServer +
+        localServer +
         ':5000/price-assist/api/network-scrapers' +
         '?retailer=' +
         message.retailer +
@@ -64,7 +65,7 @@ function connected(p) {
 
       const url2 =
         'http://' +
-        piDevServer +
+        localServer +
         ':5000/price-assist/api/process-scrapers' +
         '?retailer=' +
         message.retailer +
@@ -157,36 +158,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(result => {
         const token = result.credential.accessToken;
         const user = result.user;
-        firebase
-          .auth()
-          .currentUser.getIdToken(/* forceRefresh */ true)
-          .then(function(idToken) {
-            const sendUID = new XMLHttpRequest();
-            sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
-            sendUID.send();
-            sendUID.onload = e => {
-              if (sendUID.status === 200) {
-                const data = JSON.parse(sendUID.responseText);
-                data.item_models.forEach(itemModel => {
-                  console.log(retailerData.itemModel, itemModel);
-                  if (retailerData.itemModel === itemModel) {
-                    console.log(portFromCS);
-                    portFromCS.postMessage({ message: 'saved product', onlyToggle: true });
-                  }
-                });
-                // If there was problem getting the data from the user
-                // it means that the user does not exist, so we need to make
-                // a POST request
-              } else if (sendUID.status === 404) {
-                createNewUser(idToken);
-              }
-              console.log(sendUID.response, sendUID.status);
-            };
-          })
-          .catch(function(error) {
-            // Handle error
-            console.log('Error singing in: ', error);
-          });
+        checkProductSaved();
       })
       .catch(error => {
         const errorCode = error.code;
@@ -214,6 +186,40 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
   }
 });
+
+function checkProductSaved() {
+  if (firebase.auth().currentUser != null) {
+    firebase
+      .auth()
+      .currentUser.getIdToken(/* forceRefresh */ true)
+      .then(function(idToken) {
+        const sendUID = new XMLHttpRequest();
+        sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
+        sendUID.send();
+        sendUID.onload = e => {
+          if (sendUID.status === 200) {
+            const data = JSON.parse(sendUID.responseText);
+            data.item_models.forEach(itemModel => {
+              console.log(retailerData.itemModel, itemModel);
+              if (retailerData.itemModel === itemModel) {
+                portFromCS.postMessage({ message: 'saved product', onlyToggle: true });
+              }
+            });
+            // If there was problem getting the data from the user
+            // it means that the user does not exist, so we need to make
+            // a POST request
+          } else if (sendUID.status === 404) {
+            createNewUser(idToken);
+          }
+          console.log(sendUID.response, sendUID.status);
+        };
+      })
+      .catch(function(error) {
+        // Handle error
+        console.log('Error singing in: ', error);
+      });
+  }
+}
 
 function createNewUser(idToken) {
   // Add a user using the uid token
