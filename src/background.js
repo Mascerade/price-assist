@@ -49,7 +49,7 @@ function connected(p) {
 
       const url1 =
         'http://' +
-        localServer +
+        piDevServer +
         ':5000/price-assist/api/network-scrapers' +
         '?retailer=' +
         message.retailer +
@@ -65,7 +65,7 @@ function connected(p) {
 
       const url2 =
         'http://' +
-        localServer +
+        piDevServer +
         ':5000/price-assist/api/process-scrapers' +
         '?retailer=' +
         message.retailer +
@@ -103,7 +103,7 @@ function connected(p) {
           .currentUser.getIdToken(/* forceRefresh */ true)
           .then(function(idToken) {
             const sendItemModel = new XMLHttpRequest();
-            sendItemModel.open('PUT', 'http://' + localServer + ':5002');
+            sendItemModel.open('PUT', 'http://' + piDevServer + ':5002');
             sendItemModel.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             sendItemModel.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }));
             sendItemModel.onload = e => {
@@ -130,7 +130,7 @@ function connected(p) {
           .currentUser.getIdToken(/* forceRefresh */ true)
           .then(function(idToken) {
             const deleteReq = new XMLHttpRequest();
-            deleteReq.open('DELETE', 'http://' + localServer + ':5002/del_item_model');
+            deleteReq.open('DELETE', 'http://' + piDevServer + ':5002/del_item_model');
             deleteReq.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             deleteReq.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }));
             deleteReq.onload = e => {
@@ -194,7 +194,7 @@ function checkProductSaved() {
       .currentUser.getIdToken(/* forceRefresh */ true)
       .then(function(idToken) {
         const sendUID = new XMLHttpRequest();
-        sendUID.open('GET', 'http://' + localServer + ':5002?uid_token=' + idToken);
+        sendUID.open('GET', 'http://' + piDevServer + ':5002?uid_token=' + idToken);
         sendUID.send();
         sendUID.onload = e => {
           if (sendUID.status === 200) {
@@ -224,7 +224,7 @@ function checkProductSaved() {
 function createNewUser(idToken) {
   // Add a user using the uid token
   const postUser = new XMLHttpRequest();
-  postUser.open('POST', 'http://' + localServer + ':5002');
+  postUser.open('POST', 'http://' + piDevServer + ':5002');
   postUser.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
   postUser.send(JSON.stringify({ uid_token: idToken }));
   postUser.onload = e => {
