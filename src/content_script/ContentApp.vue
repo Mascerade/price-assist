@@ -7,22 +7,22 @@
 </template>
 
 <script>
-import ContentHeader from './ContentHeader';
-import RetailersContainer from './RetailersContainer';
-import Footer from './Footer';
-import { bus } from './bus';
-import 'typeface-muli';
-import 'typeface-quicksand';
-import 'material-icons';
+import ContentHeader from './ContentHeader'
+import RetailersContainer from './RetailersContainer'
+import Footer from './Footer'
+import { bus } from './bus'
+import 'typeface-muli'
+import 'typeface-quicksand'
+import 'material-icons'
 
 export default {
-  data() {
+  data () {
     return {
       retailerData: [],
-      productSaved: false,
-    };
+      productSaved: false
+    }
   },
-  created() {
+  created () {
     bus.$on('newRetailerData', retailerData => {
       for (const [key, value] of Object.entries(retailerData)) {
         if (value[1] == null || value[2] == null || key === 'identifier' || key === 'title') {
@@ -30,45 +30,45 @@ export default {
           this.retailerData.push({
             title: value[0],
             price: value[1],
-            link: value[2],
-          });
+            link: value[2]
+          })
         }
       }
-    });
+    })
     bus.$on('needAccount', () => {
       this.$toasted
         .error('Sign In First!', {
           icon: 'error',
-          position: 'bottom-center',
+          position: 'bottom-center'
         })
-        .goAway(1200);
-    });
+        .goAway(1200)
+    })
     bus.$on('productSaved', onlyToggle => {
-      this.productSaved = true;
+      this.productSaved = true
       if (!onlyToggle) {
         this.$toasted
           .show('Added Product!', {
             icon: 'add',
-            position: 'bottom-center',
+            position: 'bottom-center'
           })
-          .goAway(1200);
+          .goAway(1200)
       }
-    });
+    })
     bus.$on('removedProduct', () => {
-      this.productSaved = false;
+      this.productSaved = false
       this.$toasted
         .show('Removed Product!', {
-          position: 'bottom-center',
+          position: 'bottom-center'
         })
-        .goAway(1200);
-    });
+        .goAway(1200)
+    })
   },
   components: {
     'pa-content-header': ContentHeader,
     'pa-retailers-container': RetailersContainer,
-    'pa-footer': Footer,
-  },
-};
+    'pa-footer': Footer
+  }
+}
 </script>
 
 <style lang="css" scoped>

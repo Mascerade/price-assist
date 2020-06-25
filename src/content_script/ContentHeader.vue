@@ -10,12 +10,12 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      closeImgPath: 'chrome-extension://ginjedfmofjnnljikpcgealoahjdifmo/content_script/images/close.png',
-    };
-  },
-};
+      closeImgPath: 'chrome-extension://ginjedfmofjnnljikpcgealoahjdifmo/content_script/images/close.png'
+    }
+  }
+}
 </script>
 
 <style lang="css" scoped>

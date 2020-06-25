@@ -1,25 +1,25 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
 export const bus = new Vue({
   data: {},
   methods: {
-    sendRetailers(retailerData) {
-      this.$emit('newRetailerData', retailerData);
+    sendRetailers (retailerData) {
+      this.$emit('newRetailerData', retailerData)
     },
-    sendSaveProduct() {
-      this.$emit('saveProduct');
+    sendSaveProduct () {
+      this.$emit('saveProduct')
     },
-    sendProductSaved(onlyToggle) {
-      this.$emit('productSaved', onlyToggle);
+    sendProductSaved (onlyToggle) {
+      this.$emit('productSaved', onlyToggle)
     },
-    sendRemoveProduct() {
-      this.$emit('removeProduct');
+    sendRemoveProduct () {
+      this.$emit('removeProduct')
     },
-    sendRemovedProduct() {
-      this.$emit('removedProduct');
+    sendRemovedProduct () {
+      this.$emit('removedProduct')
     },
-    sendNeedAccount() {
-      this.$emit('needAccount');
-    },
-  },
-});
+    sendNeedAccount () {
+      this.$emit('needAccount')
+    }
+  }
+})

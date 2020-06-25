@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import RetailerCard from './RetailerCard';
+import RetailerCard from './RetailerCard'
 
 export default {
   props: ['retailerData'],
   components: {
-    'pa-retailer-card': RetailerCard,
-  },
-};
+    'pa-retailer-card': RetailerCard
+  }
+}
 </script>
 
 <style lang="css" scoped>

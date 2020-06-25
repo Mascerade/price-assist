@@ -15,8 +15,8 @@
 <script>
 // import 'typeface-quicksand';
 export default {
-  props: ['retailer'],
-};
+  props: ['retailer']
+}
 </script>
 
 <style lang="css" scoped>

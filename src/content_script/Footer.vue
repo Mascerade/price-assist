@@ -8,18 +8,18 @@
 </template>
 
 <script>
-import { bus } from './bus';
+import { bus } from './bus'
 export default {
   props: ['productSaved'],
   methods: {
-    saveProduct() {
-      bus.sendSaveProduct();
+    saveProduct () {
+      bus.sendSaveProduct()
     },
-    removeProduct() {
-      bus.sendRemoveProduct();
-    },
-  },
-};
+    removeProduct () {
+      bus.sendRemoveProduct()
+    }
+  }
+}
 </script>
 
 <style lang="css">
