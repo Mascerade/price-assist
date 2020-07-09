@@ -14,6 +14,9 @@
           <span class="material-icons">chevron_right</span>
         </div>
       </div>
+      <div id="to-track-prices">
+        <a href="http://www.timeless-apps.com/" target="_blank">Check Out Track Prices!</a>
+      </div>
     </div>
     <a id="sign-out" @click.prevent="signOut()">Sign Out</a>
   </div>
@@ -81,6 +84,8 @@ export default {
 }
 
 #content {
+  display: flex;
+  flex-flow: column;
   flex: 1;
 }
 
@@ -118,6 +123,26 @@ export default {
 
 #saved-products-text-container > span:nth-child(2) {
   font-size: 25px;
+}
+
+#to-track-prices {
+  display: flex;
+  flex-flow: column;
+  justify-items: center;
+  width: 100%;
+  height: 35px;
+  margin-top: 71px;
+  text-align: center;
+  font-size: 22px;
+  background-image:  linear-gradient(315deg, #06bcfb 0%, #4884ee 74%);
+}
+
+#to-track-prices > a {
+  width: 100%;
+  height: 100%;
+  color: white;
+  text-decoration: none;
+  margin-top: 2px;
 }
 
 #sign-out {
