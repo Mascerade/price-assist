@@ -7,7 +7,13 @@
       </div>
     </div>
     <div id="content">
-
+      <div id="saved-products">
+        <span class="material-icons">check_circle_outline</span>
+        <div id="saved-products-text-container">
+          <p>{{ savedProducts.length }} products currently <span>saved!</span></p>
+          <span class="material-icons">chevron_right</span>
+        </div>
+      </div>
     </div>
     <a id="sign-out" @click.prevent="signOut()">Sign Out</a>
   </div>
@@ -18,6 +24,14 @@ export default {
   data () {
     return {
       profileImg: 'https://lh3.googleusercontent.com/ogw/ADGmqu9CohlcoBgcFIjT__icy6vLfyusMxjm0m05nJhd=s32-c-mo',
+      savedProducts: [
+        { 'item-model': 'item-model', title: 'Title' },
+        { 'item-model': 'item-model', title: 'Title' },
+        { 'item-model': 'item-model', title: 'Title' },
+        { 'item-model': 'item-model', title: 'Title' },
+        { 'item-model': 'item-model', title: 'Title' },
+        { 'item-model': 'item-model', title: 'Title' }
+      ]
     }
   },
   methods: {
@@ -68,6 +82,42 @@ export default {
 
 #content {
   flex: 1;
+}
+
+#saved-products {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  height: 50px;
+  margin-top: 8px;
+  background-color: #fcfcfc;
+}
+
+#saved-products > span {
+  font-size: 30px;
+  color: #2cb922;
+}
+
+#saved-products-text-container {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+#saved-products-text-container > p {
+  font-size: 18px;
+  margin: 0;
+}
+
+#saved-products-text-container > p > span:nth-child(1) {
+  color: #40c4ff;
+}
+
+#saved-products-text-container > span:nth-child(2) {
+  font-size: 25px;
 }
 
 #sign-out {

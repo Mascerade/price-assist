@@ -40,8 +40,8 @@ export default {
   display: flex;
   flex-flow: column;
   align-items: center;
-  height: 325px;
-  width: 325px;
+  height: 250px;
+  width: 300px;
 }
 
 p {
