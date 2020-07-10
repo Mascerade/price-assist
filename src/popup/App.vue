@@ -1,7 +1,7 @@
 <template>
   <div id="container">
-    <pa-user-view v-if="signedIn" />
-    <div v-else>
+    <pa-user-view v-show="signedIn" />
+    <div v-show="!signedIn">
       <p id="sign-in">Sign In with Google</p>
       <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
       <button @click="setData" class="btn btn-outline-dark">Set Data!</button>
@@ -12,10 +12,11 @@
 
 <script>
 import UserView from './UserView'
+
 export default {
   data () {
     return {
-      signedIn: true
+      signedIn: bus.signedIn
     }
   },
   methods: {

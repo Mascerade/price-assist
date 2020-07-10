@@ -1,6 +1,6 @@
 <template>
   <div id="price-assist-content">
-    <pa-retailer-card v-for="retailer in retailerData" :retailer="retailer" />
+    <pa-retailer-card v-for="retailer in retailerData" :retailer="retailer" :key="retailer['title']" />
   </div>
 </template>
 

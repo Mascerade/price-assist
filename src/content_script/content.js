@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Toasted from 'vue-toasted'
 import Content from './ContentApp'
 import { amazon } from './Amazon'
-import { bus } from './bus'
+import { bus } from '../bus'
 
 // First thing to do is to connect to the background script
 const port = chrome.runtime.connect({ name: 'cs-port' })
@@ -24,6 +24,7 @@ retailer.extractCategory()
 // The background script will actually send the request to the server
 if (retailer.validCategories.includes(retailer.category)) {
   retailer.extractAllData()
+  bus.savedProducts.push({ itemModel: retailer.itemModel, title: retailer.title })
   port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc })
 }
 

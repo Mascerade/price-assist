@@ -218,6 +218,15 @@ function checkProductSaved () {
         // Handle error
         console.log('Error singing in: ', error)
       })
+    const getTitles = new XMLHttpRequest()
+    getTitles.open('GET', 'http://' + piDevServer + ':5003/item_model_data')
+    getTitles.send()
+    getTitles.onload = e => {
+      if (getTitles.status === 200) {
+        const data = JSON.parse(getTitles.responseText)
+        bus.itemModelsToTitles = data
+      }
+    }
   }
 }
 
