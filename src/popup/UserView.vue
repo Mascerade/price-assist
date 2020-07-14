@@ -23,7 +23,7 @@
     <div v-if="productView" class="content">
       <div id="products-container">
         <div id="product-list-item" v-for="product in savedProducts" :key="product">
-          <p>{{ itemModelsToTitles[product] | truncate }}</p>
+          <p>{{ itemModelToTitle[product] | truncate }}</p>
           <div style="display: flex; flex: 1; flex-flow: row; justify-content: flex-end;">
             <a @click.prevent="removeProduct(product)">Remove</a>
           </div>
@@ -41,13 +41,10 @@
 
 <script>
 export default {
+  props: ['profileImg', 'displayName', 'savedProducts', 'itemModelToTitle'],
   data () {
     return {
-      profileImg: '',
-      displayName: '',
-      productView: false,
-      savedProducts: '',
-      itemModelsToTitles: ''
+      productView: false
     }
   },
   methods: {

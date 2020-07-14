@@ -210,6 +210,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log(error)
       })
   } else if (request.message === 'get profile') {
+    console.log(Profile.getAllData())
     sendResponse({ profile: Profile.getAllData() })
   }
 })
@@ -232,7 +233,7 @@ function checkProductSaved () {
           if (sendUID.status === 200) {
             const data = JSON.parse(sendUID.responseText)
             // Add the item models saved to the accounts to savedProducts to use in the popup
-            Profile.savedProducts = data
+            Profile.savedProducts = data.item_models
 
             // If the current item model is in the list of item models already saved,
             // change the GUI

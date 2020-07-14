@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <pa-user-view v-show="signedIn" />
+    <pa-user-view v-show="signedIn" :profileImg="profileImg" :displayName="displayName" :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
     <div v-show="!signedIn">
       <p id="sign-in">Sign In with Google</p>
       <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
@@ -12,15 +12,25 @@
 
 <script>
 import UserView from './UserView'
+import { bus } from '../bus'
 
 export default {
   data () {
     return {
+      signedIn: false,
+      profileImg: '',
+      displayName: '',
+      savedProducts: [],
+      itemModelToTitle: {}
     }
   },
   created () {
-    chrome.runtime.sendMessage({ message: 'get profile' }, function (response) {
-      console.log(response.profile)
+    bus.$on('popupProfile', (profile) => {
+      this.profileImg = profile.profileImg
+      this.displayName = profile.displayName
+      this.savedProducts = profile.savedProducts
+      this.itemModelToTitle = profile.itemModelToTitle
+      this.signedIn = profile.signedIn
     })
   },
   methods: {

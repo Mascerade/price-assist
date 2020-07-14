@@ -21,6 +21,9 @@ export const bus = new Vue({
     },
     sendNeedAccount () {
       this.$emit('needAccount')
+    },
+    popupSendProfile (profile) {
+      this.$emit('popupProfile', profile)
     }
   }
 })

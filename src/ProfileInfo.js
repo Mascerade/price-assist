@@ -1,7 +1,7 @@
 class Profile {
   static signedIn = false
   static profileImg = ''
-  static displayname = ''
+  static displayName = ''
   static savedProducts = []
   static itemModelToTitle = {}
 
