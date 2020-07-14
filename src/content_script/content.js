@@ -24,7 +24,6 @@ retailer.extractCategory()
 // The background script will actually send the request to the server
 if (retailer.validCategories.includes(retailer.category)) {
   retailer.extractAllData()
-  bus.savedProducts.push({ itemModel: retailer.itemModel, title: retailer.title })
   port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc })
 }
 

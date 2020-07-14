@@ -16,7 +16,6 @@ import UserView from './UserView'
 export default {
   data () {
     return {
-      signedIn: bus.signedIn
     }
   },
   methods: {

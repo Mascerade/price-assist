@@ -7,7 +7,7 @@ import 'firebase/database'
 const localServer = 'localhost'
 const timelessServer = 'timeless-apps.com'
 const piDevServer = '10.0.0.203'
-var currentItemModel
+var currentUser
 const retailerData = {}
 
 // Create Firebase Configuration
@@ -34,6 +34,21 @@ global.browser = require('webextension-polyfill')
 
 chrome.runtime.onConnect.addListener(connected)
 
+// Event handler for if the user signs in or out
+firebase.auth().onAuthStateChanged(function (user) {
+  console.log(user)
+  if (user) {
+    currentUser = user
+  }
+})
+
+/*
+This port is connected to the content script only.
+It serves the purpose of:
+  * Making requests to the server in order to get retailer data ('get data')
+  * Saving products when the user clicks the 'Save Product' button ('save product')
+  * Removing a product when the user clicks 'Unsave Product' ('Remove Product')
+*/
 function connected (p) {
   portFromCS = p
   portFromCS.onMessage.addListener(message => {
@@ -97,11 +112,10 @@ function connected (p) {
       }
     } else if (message.message === 'save product') {
       // Make a PUT request that saves the item model to the user's database
-      if (firebase.auth().currentUser != null) {
-        firebase
-          .auth()
-          .currentUser.getIdToken(/* forceRefresh */ true)
+      if (currentUser != null) {
+        currentUser.getIdToken(/* forceRefresh */ true)
           .then(function (idToken) {
+            // Create the request
             const sendItemModel = new XMLHttpRequest()
             sendItemModel.open('PUT', 'http://' + piDevServer + ':5002')
             sendItemModel.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
@@ -124,10 +138,8 @@ function connected (p) {
       }
     } else if (message.message === 'remove product') {
       // Make a DELETE request to remove the product from the user
-      if (firebase.auth().currentUser != null) {
-        firebase
-          .auth()
-          .currentUser.getIdToken(/* forceRefresh */ true)
+      if (currentUser != null) {
+        currentUser.getIdToken(/* forceRefresh */ true)
           .then(function (idToken) {
             const deleteReq = new XMLHttpRequest()
             deleteReq.open('DELETE', 'http://' + piDevServer + ':5002/del_item_model')
@@ -168,7 +180,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
   } else if (request.message === 'set data') {
     // Used simply to check if a user is signed in
-    if (firebase.auth().currentUser != null) {
+    if (currentUser != null) {
       console.log('authenticated!')
     } else {
       console.log('unauthenticated!')
@@ -187,24 +199,33 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 })
 
+/*
+Checks if the current product is saved or not.
+This is used to change the content script GUI to either
+'Unsave Product' or 'Save Product'.
+This is run anytime the user signs in
+*/
 function checkProductSaved () {
   if (firebase.auth().currentUser != null) {
-    firebase
-      .auth()
-      .currentUser.getIdToken(/* forceRefresh */ true)
+    currentUser.getIdToken(/* forceRefresh */ true)
       .then(function (idToken) {
+        // Creates the request to the user database
         const sendUID = new XMLHttpRequest()
         sendUID.open('GET', 'http://' + piDevServer + ':5002?uid_token=' + idToken)
         sendUID.send()
         sendUID.onload = e => {
           if (sendUID.status === 200) {
             const data = JSON.parse(sendUID.responseText)
+
+            // If the current item model is in the list of item models already saved,
+            // change the GUI
             data.item_models.forEach(itemModel => {
               console.log(retailerData.itemModel, itemModel)
               if (retailerData.itemModel === itemModel) {
                 portFromCS.postMessage({ message: 'saved product', onlyToggle: true })
               }
             })
+
             // If there was problem getting the data from the user
             // it means that the user does not exist, so we need to make
             // a POST request
@@ -218,13 +239,14 @@ function checkProductSaved () {
         // Handle error
         console.log('Error singing in: ', error)
       })
+
+    // Get the item model to title JSON for the popup
     const getTitles = new XMLHttpRequest()
     getTitles.open('GET', 'http://' + piDevServer + ':5003/item_model_data')
     getTitles.send()
     getTitles.onload = e => {
       if (getTitles.status === 200) {
         const data = JSON.parse(getTitles.responseText)
-        bus.itemModelsToTitles = data
       }
     }
   }

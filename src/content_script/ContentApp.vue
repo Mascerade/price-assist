@@ -23,6 +23,8 @@ export default {
     }
   },
   created () {
+    // After we get data from the server, we iterate over it and add it to retailerData
+    // in order to be displayed as a card in the GUI
     bus.$on('newRetailerData', retailerData => {
       for (const [key, value] of Object.entries(retailerData)) {
         if (value[1] == null || value[2] == null || key === 'identifier' || key === 'title') {
@@ -35,6 +37,8 @@ export default {
         }
       }
     })
+    // Display a toast saying that the user needs to create an account before
+    // saving a product
     bus.$on('needAccount', () => {
       this.$toasted
         .error('Sign In First!', {
@@ -43,6 +47,7 @@ export default {
         })
         .goAway(1200)
     })
+    // Display a toast if the user saved a product
     bus.$on('productSaved', onlyToggle => {
       this.productSaved = true
       if (!onlyToggle) {
@@ -54,6 +59,7 @@ export default {
           .goAway(1200)
       }
     })
+    // Display a toast if the user unsaved/removed a product
     bus.$on('removedProduct', () => {
       this.productSaved = false
       this.$toasted
