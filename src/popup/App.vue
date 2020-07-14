@@ -18,6 +18,11 @@ export default {
     return {
     }
   },
+  created () {
+    chrome.runtime.sendMessage({ message: 'get profile' }, function (response) {
+      console.log(response.profile)
+    })
+  },
   methods: {
     signIn () {
       chrome.runtime.sendMessage({ message: 'sign in' }, function (response) {})

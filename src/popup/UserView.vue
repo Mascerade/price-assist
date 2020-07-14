@@ -40,15 +40,14 @@
 </template>
 
 <script>
-import { bus } from '../bus'
 export default {
   data () {
     return {
-      profileImg: bus.profileImg,
-      displayName: bus.dispalyName,
+      profileImg: '',
+      displayName: '',
       productView: false,
-      savedProducts: bus.savedProducts,
-      itemModelsToTitles: bus.itemModelsToTitles
+      savedProducts: '',
+      itemModelsToTitles: ''
     }
   },
   methods: {

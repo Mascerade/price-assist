@@ -2,6 +2,7 @@
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
+import { Profile } from './ProfileInfo'
 
 // Consts for the different servers
 const localServer = 'localhost'
@@ -39,6 +40,11 @@ firebase.auth().onAuthStateChanged(function (user) {
   console.log(user)
   if (user) {
     currentUser = user
+    Profile.signedIn = true
+    Profile.displayName = user.displayName
+    Profile.profileImg = user.photoURL
+    checkProductSaved()
+    console.log(Profile.profileImg)
   }
 })
 
@@ -123,7 +129,8 @@ function connected (p) {
             sendItemModel.onload = e => {
               console.log(sendItemModel.response, sendItemModel.status)
               if (sendItemModel.status === 204) {
-                // Send back the fact that we saved the product
+                // Save the item model in Profile and send back the fact that we saved the product
+                Profile.savedProducts.push(message.itemModel)
                 portFromCS.postMessage({ message: 'saved product', onlyToggle: false })
               } else if (sendItemModel.status === 404) {
                 // Send back the fact that the user is not signed in
@@ -148,6 +155,12 @@ function connected (p) {
             deleteReq.onload = e => {
               console.log(deleteReq.response, deleteReq.status)
               if (deleteReq.status === 204) {
+                // Remove the product from savedProducts in Profile and send the GUI that we removed the product
+                for (let i = 0; i < Profile.savedProducts.length; i++) {
+                  if (Profile.savedProducts[i] === message.itemModel) {
+                    Profile.savedProducts.splice(i, 1)
+                  }
+                }
                 portFromCS.postMessage({ message: 'removed product' })
               }
             }
@@ -196,6 +209,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .catch(function (error) {
         console.log(error)
       })
+  } else if (request.message === 'get profile') {
+    sendResponse({ profile: Profile.getAllData() })
   }
 })
 
@@ -206,7 +221,7 @@ This is used to change the content script GUI to either
 This is run anytime the user signs in
 */
 function checkProductSaved () {
-  if (firebase.auth().currentUser != null) {
+  if (currentUser != null) {
     currentUser.getIdToken(/* forceRefresh */ true)
       .then(function (idToken) {
         // Creates the request to the user database
@@ -216,6 +231,8 @@ function checkProductSaved () {
         sendUID.onload = e => {
           if (sendUID.status === 200) {
             const data = JSON.parse(sendUID.responseText)
+            // Add the item models saved to the accounts to savedProducts to use in the popup
+            Profile.savedProducts = data
 
             // If the current item model is in the list of item models already saved,
             // change the GUI
@@ -247,6 +264,7 @@ function checkProductSaved () {
     getTitles.onload = e => {
       if (getTitles.status === 200) {
         const data = JSON.parse(getTitles.responseText)
+        Profile.itemModelToTitle = data
       }
     }
   }
