@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <pa-user-view v-show="signedIn" :profileImg="profileImg" :displayName="displayName" :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
+    <pa-user-view v-show="signedIn" @removeProduct="removeProduct" :profileImg="profileImg" :displayName="displayName" :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
     <div v-show="!signedIn">
       <p id="sign-in">Sign In with Google</p>
       <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
@@ -32,6 +32,9 @@ export default {
       this.itemModelToTitle = profile.itemModelToTitle
       this.signedIn = profile.signedIn
     })
+    bus.$on('updatePopupItemModels', (products) => {
+      this.savedProducts = products
+    })
   },
   methods: {
     signIn () {
@@ -42,6 +45,13 @@ export default {
     },
     signOut () {
       chrome.runtime.sendMessage({ message: 'sign out' }, function (response) {})
+    },
+    removeProduct (itemModel) {
+      chrome.runtime.sendMessage({ message: 'remove product', 'itemModel': itemModel }, function (response) {
+        // Emits 'updatePopupItemModels' which we pick up
+        // Had to do this because 'this' here is null
+        bus.popupUpdateItemModels(response.profile.savedProducts)
+      })
     }
   },
   components: {

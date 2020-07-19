@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import { Profile } from './ProfileInfo'
+import { bus } from './bus'
 
 // Consts for the different servers
 const localServer = 'localhost'
@@ -146,25 +147,7 @@ function connected (p) {
     } else if (message.message === 'remove product') {
       // Make a DELETE request to remove the product from the user
       if (currentUser != null) {
-        currentUser.getIdToken(/* forceRefresh */ true)
-          .then(function (idToken) {
-            const deleteReq = new XMLHttpRequest()
-            deleteReq.open('DELETE', 'http://' + piDevServer + ':5002/del_item_model')
-            deleteReq.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-            deleteReq.send(JSON.stringify({ uid_token: idToken, item_model: message.itemModel }))
-            deleteReq.onload = e => {
-              console.log(deleteReq.response, deleteReq.status)
-              if (deleteReq.status === 204) {
-                // Remove the product from savedProducts in Profile and send the GUI that we removed the product
-                for (let i = 0; i < Profile.savedProducts.length; i++) {
-                  if (Profile.savedProducts[i] === message.itemModel) {
-                    Profile.savedProducts.splice(i, 1)
-                  }
-                }
-                portFromCS.postMessage({ message: 'removed product' })
-              }
-            }
-          })
+        removeItemModel(message.itemModel)
       }
     }
   })
@@ -212,6 +195,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.message === 'get profile') {
     console.log(Profile.getAllData())
     sendResponse({ profile: Profile.getAllData() })
+  } else if (request.message === 'remove product') {
+    // removeItemModel returns a promise, so we have to wait for the response
+    removeItemModel(request.itemModel).then(function (result) {
+      if (result) {
+        // Send back the profile
+        sendResponse({ profile: Profile.getAllData() })
+      }
+    })
+
+    // Makes sure that the message port stays open
+    return true
   }
 })
 
@@ -269,6 +263,37 @@ function checkProductSaved () {
       }
     }
   }
+}
+
+function removeItemModel (itemModel) {
+  return new Promise(resolve => {
+    currentUser.getIdToken(/* forceRefresh */ true)
+      .then(function (idToken) {
+        const deleteReq = new XMLHttpRequest()
+        deleteReq.open('DELETE', 'http://' + piDevServer + ':5002/del_item_model')
+        deleteReq.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        deleteReq.send(JSON.stringify({ uid_token: idToken, item_model: itemModel }))
+        deleteReq.onload = e => {
+          console.log(deleteReq.response, deleteReq.status)
+          if (deleteReq.status === 204) {
+          // Remove the product from savedProducts in Profile and send the GUI that we removed the product
+            for (let i = 0; i < Profile.savedProducts.length; i++) {
+              if (Profile.savedProducts[i] === itemModel) {
+                Profile.savedProducts.splice(i, 1)
+              }
+            }
+            // Only if the content script has the item model, send a message to change the footer to Unsave
+            if (itemModel === retailerData.itemModel) {
+              portFromCS.postMessage({ message: 'removed product' })
+            }
+            // For the deleting from the popup, we want to know whether or not is succeeded
+            resolve(true)
+          } else if (deleteReq.status === 404) {
+            resolve(false)
+          }
+        }
+      })
+  })
 }
 
 function createNewUser (idToken) {

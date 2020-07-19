@@ -24,6 +24,9 @@ export const bus = new Vue({
     },
     popupSendProfile (profile) {
       this.$emit('popupProfile', profile)
+    },
+    popupUpdateItemModels (profile) {
+      this.$emit('updatePopupItemModels', profile)
     }
   }
 })

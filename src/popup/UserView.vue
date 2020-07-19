@@ -54,10 +54,11 @@ export default {
   },
   methods: {
     signOut () {
+      console.log(this.savedProducts)
       console.log('have to sign out')
     },
     removeProduct (itemModel) {
-      console.log('gotta remove ' + itemModel)
+      this.$emit('removeProduct', itemModel)
     }
   },
   filters: {
