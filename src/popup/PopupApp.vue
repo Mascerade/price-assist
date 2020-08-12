@@ -3,10 +3,12 @@
     <pa-user-view v-show="signedIn" @removeProduct="removeProduct" @signOut="signOut"
     :profileImg="profileImg" :displayName="displayName"
     :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
-    <div v-show="!signedIn">
-      <p id="sign-in">Sign In with Google</p>
-      <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
-      <button @click="signOut" class="btn btn-outline-dark">Sign Out!</button>
+    <div id="notSigned" v-show="!signedIn">
+      <div id="google">
+        <img :src="googleImgPath" alt="Gooogle" height="45px" width="45px">
+        <p id="sign-in">Sign In</p>
+      </div>
+      <button @click="signIn" class="btn btn-outline-primary">Sign In!</button>
     </div>
   </div>
 </template>
@@ -22,7 +24,9 @@ export default {
       profileImg: '',
       displayName: '',
       savedProducts: [],
-      itemModelToTitle: {}
+      itemModelToTitle: {},
+      // IMAGES
+      googleImgPath: 'chrome-extension://ginjedfmofjnnljikpcgealoahjdifmo/popup/images/google-icon.svg'
     }
   },
   created () {
@@ -67,12 +71,28 @@ export default {
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
   height: 250px;
   width: 300px;
 }
 
+#notSigned {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#google {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}
+
 p {
-  font-size: 20px;
+  font-size: 19px;
   text-align: center;
+  margin: 0;
+  margin-left: 3px;
 }
 </style>
