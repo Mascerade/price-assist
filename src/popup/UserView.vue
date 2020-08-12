@@ -57,6 +57,7 @@ export default {
     signOut () {
       console.log(this.savedProducts)
       console.log('have to sign out')
+      this.$emit('signOut')
     },
     // Sent to PopupApp
     // Removes an item model from the user's account

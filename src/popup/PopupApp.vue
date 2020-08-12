@@ -1,6 +1,8 @@
 <template>
   <div id="container">
-    <pa-user-view v-show="signedIn" @removeProduct="removeProduct" :profileImg="profileImg" :displayName="displayName" :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
+    <pa-user-view v-show="signedIn" @removeProduct="removeProduct" @signOut="signOut"
+    :profileImg="profileImg" :displayName="displayName"
+    :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
     <div v-show="!signedIn">
       <p id="sign-in">Sign In with Google</p>
       <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
@@ -44,6 +46,7 @@ export default {
     },
     signOut () {
       chrome.runtime.sendMessage({ message: 'sign out' }, function (response) {})
+      this.signedIn = false
     },
     removeProduct (itemModel) {
       chrome.runtime.sendMessage({ message: 'remove product', 'itemModel': itemModel }, function (response) {

@@ -16,6 +16,14 @@ class Profile {
       itemModelToTitle: this.itemModelToTitle
     }
   }
+
+  static clearData () {
+    this.signedIn = false
+    this.profileImg = ''
+    this.displayName = ''
+    this.savedProducts = []
+    this.itemModelToTitle = {}
+  }
 }
 
 export { Profile }

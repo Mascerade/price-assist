@@ -182,6 +182,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .auth()
       .signOut()
       .then(function () {
+        Profile.clearData()
         console.log('successfully signed out')
       })
       .catch(function (error) {
