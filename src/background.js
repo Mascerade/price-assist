@@ -138,6 +138,9 @@ function connected (p) {
               }
             }
           })
+
+        // Update the item model to title object in the Profile class
+        getItemModelToTitle()
       } else {
         // Send back the fact that the user is not signed in
         console.log('You must authenticate with Google by clicking on the Chrome Extension icon.')
@@ -187,7 +190,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.message === 'get profile') {
     // Sends the profile data to the popup
     console.log(Profile.getAllData())
-    sendResponse({ profile: Profile.getAllData() })
+    const profile = Profile.getAllData()
+    if (profile.signedIn) {
+      sendResponse({ profile: profile })
+    }
   } else if (request.message === 'remove product') {
     // Removes a given item model (sent by the popup)
     // removeItemModel returns a promise, so we have to wait for the response
@@ -245,16 +251,7 @@ function checkProductSaved () {
         console.log('Error singing in: ', error)
       })
 
-    // Get the item model to title JSON for the popup
-    const getTitles = new XMLHttpRequest()
-    getTitles.open('GET', 'http://' + piDevServer + ':5003/item_model_data')
-    getTitles.send()
-    getTitles.onload = e => {
-      if (getTitles.status === 200) {
-        const data = JSON.parse(getTitles.responseText)
-        Profile.itemModelToTitle = data
-      }
-    }
+    getItemModelToTitle()
   }
 }
 
@@ -297,5 +294,18 @@ function createNewUser (idToken) {
   postUser.send(JSON.stringify({ uid_token: idToken }))
   postUser.onload = e => {
     console.log(postUser.response, postUser.status)
+  }
+}
+
+function getItemModelToTitle () {
+  // Get the item model to title JSON for the popup
+  const getTitles = new XMLHttpRequest()
+  getTitles.open('GET', 'http://' + piDevServer + ':5003/item_model_data')
+  getTitles.send()
+  getTitles.onload = e => {
+    if (getTitles.status === 200) {
+      const data = JSON.parse(getTitles.responseText)
+      Profile.itemModelToTitle = data
+    }
   }
 }

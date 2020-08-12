@@ -4,7 +4,6 @@
     <div v-show="!signedIn">
       <p id="sign-in">Sign In with Google</p>
       <button @click="signIn" class="btn btn-outline-dark">Sign In!</button>
-      <button @click="setData" class="btn btn-outline-dark">Set Data!</button>
       <button @click="signOut" class="btn btn-outline-dark">Sign Out!</button>
     </div>
   </div>
@@ -30,6 +29,7 @@ export default {
       this.displayName = profile.displayName
       this.savedProducts = profile.savedProducts
       this.itemModelToTitle = profile.itemModelToTitle
+      console.log(this.itemModelToTitle)
       this.signedIn = profile.signedIn
     })
     // Sent by this file (PopupApp)

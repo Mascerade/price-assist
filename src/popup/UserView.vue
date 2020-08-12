@@ -28,7 +28,7 @@
     <div v-if="productView" class="content">
       <div id="products-container">
         <div id="product-list-item" v-for="product in savedProducts" :key="product">
-          <p>{{ itemModelToTitle[product] | truncate }}</p>
+          <p>{{ itemModelToTitle[product.toLowerCase()] | truncate }}</p>
           <div style="display: flex; flex: 1; flex-flow: row; justify-content: flex-end;">
             <a @click.prevent="removeProduct(product)">Remove</a>
           </div>
