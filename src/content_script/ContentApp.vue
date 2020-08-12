@@ -23,6 +23,7 @@ export default {
     }
   },
   created () {
+    // Sent by content.js
     // After we get data from the server, we iterate over it and add it to retailerData
     // in order to be displayed as a card in the GUI
     bus.$on('newRetailerData', retailerData => {
@@ -37,6 +38,7 @@ export default {
         }
       }
     })
+    // Sent by content.js
     // Display a toast saying that the user needs to create an account before
     // saving a product
     bus.$on('needAccount', () => {
@@ -47,6 +49,7 @@ export default {
         })
         .goAway(1200)
     })
+    // Sent by content.js
     // Display a toast if the user saved a product
     bus.$on('productSaved', onlyToggle => {
       this.productSaved = true
@@ -59,6 +62,7 @@ export default {
           .goAway(1200)
       }
     })
+    // Sent by content.js
     // Display a toast if the user unsaved/removed a product
     bus.$on('removedProduct', () => {
       this.productSaved = false
