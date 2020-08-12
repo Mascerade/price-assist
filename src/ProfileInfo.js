@@ -1,3 +1,5 @@
+// The Profile class is an organized way of storing the user's profile information
+
 class Profile {
   static signedIn = false
   static profileImg = ''

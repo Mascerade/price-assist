@@ -32,6 +32,8 @@ export default {
       this.itemModelToTitle = profile.itemModelToTitle
       this.signedIn = profile.signedIn
     })
+    // Sent by this file (PopupApp)
+    // Updates the itemModels that are saved
     bus.$on('updatePopupItemModels', (products) => {
       this.savedProducts = products
     })
@@ -39,9 +41,6 @@ export default {
   methods: {
     signIn () {
       chrome.runtime.sendMessage({ message: 'sign in' }, function (response) {})
-    },
-    setData () {
-      chrome.runtime.sendMessage({ message: 'set data' }, function (response) {})
     },
     signOut () {
       chrome.runtime.sendMessage({ message: 'sign out' }, function (response) {})

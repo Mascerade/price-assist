@@ -24,6 +24,7 @@ retailer.extractCategory()
 // The background script will actually send the request to the server
 if (retailer.validCategories.includes(retailer.category)) {
   retailer.extractAllData()
+  // Sends a message to the background script and gets the retailer data
   port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc })
 }
 
@@ -44,20 +45,26 @@ new Vue({
 // Listens to messages from the background script
 port.onMessage.addListener(message => {
   if (message.message === 'add retailers') {
+    // Emits 'newRetailerData' and sends the retailer data to ContentApp.vue
     bus.sendRetailers(message.data)
   } else if (message.message === 'saved product') {
+    // Emits 'productSaved' and received by ContentApp.vue
     bus.sendProductSaved(message.onlyToggle)
   } else if (message.message === 'need to create account') {
+    // Emits 'needAccount' and received by ContentApp.vue
     bus.sendNeedAccount()
   } else if (message.message === 'removed product') {
+    // Emits 'removedProduct' and received by ContentApp.vue
     bus.sendRemovedProduct()
   }
 })
 
+// Sent by Footer.vue
 bus.$on('saveProduct', () => {
   port.postMessage({ message: 'save product', itemModel: retailer.itemModel })
 })
 
+// Sent by Footer.vue
 bus.$on('removeProduct', () => {
   port.postMessage({ message: 'remove product', itemModel: retailer.itemModel })
 })

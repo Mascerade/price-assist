@@ -12,9 +12,13 @@ import { bus } from '../bus'
 export default {
   props: ['productSaved'],
   methods: {
+    // Sends 'saveProduct' to content.js
+    // Saves the product to the user's account
     saveProduct () {
       bus.sendSaveProduct()
     },
+    // Sends 'removeProduct' to content.js
+    // Removes the product from the user's account
     removeProduct () {
       bus.sendRemoveProduct()
     }

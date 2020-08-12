@@ -53,15 +53,19 @@ export default {
     }
   },
   methods: {
+    // Sign the user out
     signOut () {
       console.log(this.savedProducts)
       console.log('have to sign out')
     },
+    // Sent to PopupApp
+    // Removes an item model from the user's account
     removeProduct (itemModel) {
       this.$emit('removeProduct', itemModel)
     }
   },
   filters: {
+    // A filter used to cut down on the length of a title
     truncate (value) {
       if (value.length > 25) {
         return value.slice(0, 25) + '...'

@@ -3,7 +3,6 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import { Profile } from './ProfileInfo'
-import { bus } from './bus'
 
 // Consts for the different servers
 const localServer = 'localhost'
@@ -50,7 +49,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 })
 
 /*
-This port is connected to the content script only.
+This port is connected to the CONTENT SCRIPT only.
 It serves the purpose of:
   * Making requests to the server in order to get retailer data ('get data')
   * Saving products when the user clicks the 'Save Product' button ('save product')
@@ -153,12 +152,12 @@ function connected (p) {
   })
 }
 
-// The chrome messages are used for communcation with the popup
+// The chrome messages are used for communcation with the POPUP
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(request.message)
+  // Signs the user through their Google account and also creates
+  // the user in our backend if they do not already exist
   if (request.message === 'sign in') {
-    // Signs the user through their Google account and also creates
-    // the user in our backend if they do not already exist
     const provider = new firebase.auth.GoogleAuthProvider()
     firebase
       .auth()
@@ -174,15 +173,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const email = error.email
         const credential = error.credential
       })
-  } else if (request.message === 'set data') {
-    // Used simply to check if a user is signed in
-    if (currentUser != null) {
-      console.log('authenticated!')
-    } else {
-      console.log('unauthenticated!')
-    }
   } else if (request.message === 'sign out') {
-    // Simply signs the user out of the application
+    // Signs the user out of the application
     firebase
       .auth()
       .signOut()
@@ -193,9 +185,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log(error)
       })
   } else if (request.message === 'get profile') {
+    // Sends the profile data to the popup
     console.log(Profile.getAllData())
     sendResponse({ profile: Profile.getAllData() })
   } else if (request.message === 'remove product') {
+    // Removes a given item model (sent by the popup)
     // removeItemModel returns a promise, so we have to wait for the response
     removeItemModel(request.itemModel).then(function (result) {
       if (result) {
@@ -203,7 +197,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ profile: Profile.getAllData() })
       }
     })
-
     // Makes sure that the message port stays open
     return true
   }
