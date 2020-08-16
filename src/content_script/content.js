@@ -17,13 +17,14 @@ if (url.includes('www.amazon.com')) {
   retailerName = 'Amazon'
 }
 
-// Get the actual object for the specific retailer along with the category
+// Get the actual object for the specific retailer and extract the data
 const retailer = retailerDict[retailerName]
-retailer.extractCategory()
-// If we support the category, get the necessary data and send it to the background script
+retailer.extractAllData()
+console.log(retailer)
+
+// If we support the category and there is an item model, send the data to the background script
 // The background script will actually send the request to the server
-if (retailer.validCategories.includes(retailer.category)) {
-  retailer.extractAllData()
+if (retailer.validCategories.includes(retailer.category) && (retailer.itemModel !== null && retailer.itemModel !== '' && retailer.itemModel !== undefined)) {
   // Sends a message to the background script and gets the retailer data
   port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc })
 }

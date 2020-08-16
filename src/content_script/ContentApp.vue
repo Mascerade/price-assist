@@ -1,8 +1,13 @@
 <template>
-  <div id="price-assist-wrapper">
-    <pa-content-header />
-    <pa-retailers-container :retailerData="retailerData" />
-    <pa-footer :productSaved="productSaved" />
+  <div>
+    <div v-if="displayGui" id="price-assist-wrapper">
+      <pa-content-header @hideGui="displayGui=false" />
+      <pa-retailers-container :retailerData="retailerData" />
+      <pa-footer :productSaved="productSaved" />
+    </div>
+    <div @click="showGui" v-else id="show-gui">
+      <p>P</p>
+    </div>
   </div>
 </template>
 
@@ -19,6 +24,7 @@ export default {
   data () {
     return {
       retailerData: [],
+      displayGui: true,
       productSaved: false
     }
   },
@@ -73,6 +79,11 @@ export default {
         .goAway(1200)
     })
   },
+  methods: {
+    showGui () {
+      this.displayGui = true
+    }
+  },
   components: {
     'pa-content-header': ContentHeader,
     'pa-retailers-container': RetailersContainer,
@@ -102,4 +113,33 @@ export default {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
+
+#show-gui {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+  z-index: 2147483647;
+  top: 200px;
+  right: 0;
+  height: 60px;
+  width: 60px;
+  background-color: #1fd1f9;
+  background-image: linear-gradient(315deg, #06bcfb 0%, #4884ee 74%);
+}
+
+#show-gui:hover {
+  cursor: pointer;
+}
+
+#show-gui > p {
+  color: white;
+  font-family: "Quicksand";
+  font-size: 36px;
+  margin: 0;
+}
+
 </style>

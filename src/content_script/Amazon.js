@@ -59,7 +59,7 @@ class Amazon {
     // Gets the item_model through this loop
     for (let i = 0; i < rowContent.length; i++) {
       if (rowContent[i].textContent.includes('Item model number')) {
-        this.itemModel = rowContent[i + 1].textContent.trim()
+        this.itemModel = rowContent[i + 1].textContent.trim().toLowerCase()
       }
     }
   }
@@ -69,6 +69,7 @@ class Amazon {
   }
 
   extractAllData () {
+    this.extractCategory()
     this.extractPrice()
     this.extractTitle()
     this.extractItemModel()

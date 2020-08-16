@@ -4,7 +4,7 @@
       <img id="price-assist-logo" src="https://dl.dropbox.com/s/7vleowye5psd2mj/only_logo_transparent_white.png?raw=0" alt="Logo" />
     </a>
     <h3>Price Assist</h3>
-    <img :src="closeImgPath" id="price-assist-close-icon" />
+    <img @click="hideGui" :src="closeImgPath" id="price-assist-close-icon" />
   </div>
 </template>
 
@@ -13,6 +13,11 @@ export default {
   data () {
     return {
       closeImgPath: 'chrome-extension://ginjedfmofjnnljikpcgealoahjdifmo/content_script/images/close.png'
+    }
+  },
+  methods: {
+    hideGui () {
+      this.$emit('hideGui')
     }
   }
 }
@@ -56,6 +61,10 @@ export default {
 #price-assist-heading > h3 {
   margin-left: 32px;
   font-size: 25px;
+}
+
+#price-assist-heading:hover {
+  cursor: pointer;
 }
 
 #price-assist-close-icon {
