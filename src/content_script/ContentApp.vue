@@ -119,7 +119,7 @@ export default {
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   border-top-left-radius: 7px;
   border-bottom-left-radius: 7px;
   z-index: 2147483647;
