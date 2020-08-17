@@ -1,16 +1,31 @@
 <template>
   <div id="price-assist-content">
-    <pa-retailer-card v-for="retailer in retailerData" :retailer="retailer" :key="retailer['title']" />
+    <pa-retailer-card v-show="loadedPrices" v-for="retailer in retailerData" :retailer="retailer" :key="retailer['title']" />
+    <pa-loading-prices v-show="!loadedPrices"></pa-loading-prices>
   </div>
 </template>
 
 <script>
+import { bus } from '../bus'
 import RetailerCard from './RetailerCard'
+import LoadingPrices from './LoadingPrices'
 
 export default {
   props: ['retailerData'],
+  data () {
+    return {
+      loadedPrices: false
+    }
+  },
+  created () {
+    bus.$on('newRetailerData', retailerData => {
+      console.log('setting loaded prices to true')
+      this.loadedPrices = true
+    })
+  },
   components: {
-    'pa-retailer-card': RetailerCard
+    'pa-retailer-card': RetailerCard,
+    'pa-loading-prices': LoadingPrices
   }
 }
 </script>
@@ -82,4 +97,5 @@ export default {
   -webkit-animation: scale-small-up 1s infinite alternate;
   animation: scale-small-up 1s infinite alternate;
 }
+
 </style>
