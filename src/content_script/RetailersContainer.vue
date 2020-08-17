@@ -1,7 +1,8 @@
 <template>
   <div id="price-assist-content">
-    <pa-retailer-card v-show="loadedPrices" v-for="retailer in retailerData" :retailer="retailer" :key="retailer['title']" />
+    <pa-retailer-card v-show="loadedPrices && foundRetailers" v-for="retailer in retailerData" :retailer="retailer" :key="retailer['title']" />
     <pa-loading-prices v-show="!loadedPrices"></pa-loading-prices>
+    <pa-no-retailer-error v-show="loadedPrices && !foundRetailers"></pa-no-retailer-error>
   </div>
 </template>
 
@@ -9,12 +10,14 @@
 import { bus } from '../bus'
 import RetailerCard from './RetailerCard'
 import LoadingPrices from './LoadingPrices'
+import NoRetailerError from './NoRetailerError'
 
 export default {
   props: ['retailerData'],
   data () {
     return {
-      loadedPrices: false
+      loadedPrices: false,
+      foundRetailers: false
     }
   },
   created () {
@@ -22,10 +25,19 @@ export default {
       console.log('setting loaded prices to true')
       this.loadedPrices = true
     })
+    bus.$on('foundRetailerData', () => {
+      this.foundRetailers = true
+    })
+    bus.$on('noRetailers', () => {
+      console.log('hereejioerjoiwsjre')
+      this.loadedPrices = true
+      this.foundRetailers = false
+    })
   },
   components: {
     'pa-retailer-card': RetailerCard,
-    'pa-loading-prices': LoadingPrices
+    'pa-loading-prices': LoadingPrices,
+    'pa-no-retailer-error': NoRetailerError
   }
 }
 </script>

@@ -43,6 +43,10 @@ export default {
           })
         }
       }
+      if (this.retailerData.length > 1) {
+        // Received by Retailers Container
+        bus.sendFoundRetailers()
+      }
     })
     // Sent by content.js
     // Display a toast saying that the user needs to create an account before

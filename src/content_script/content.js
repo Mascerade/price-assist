@@ -4,6 +4,20 @@ import Content from './ContentApp'
 import { amazon } from './Amazon'
 import { bus } from '../bus'
 
+const div = document.createElement('div')
+div.id = 'price-assist'
+document.getElementsByTagName('body')[0].appendChild(div)
+
+Vue.use(Toasted)
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#price-assist',
+  render: h => {
+    return h(Content)
+  }
+})
+
 // First thing to do is to connect to the background script
 const port = chrome.runtime.connect({ name: 'cs-port' })
 const retailerDict = {
@@ -27,21 +41,10 @@ console.log(retailer)
 if (retailer.validCategories.includes(retailer.category) && (retailer.itemModel !== null && retailer.itemModel !== '' && retailer.itemModel !== undefined)) {
   // Sends a message to the background script and gets the retailer data
   port.postMessage({ message: 'get data', retailer: retailerName, price: retailer.price, itemModel: retailer.itemModel, title: retailer.title, imgSrc: retailer.imgSrc })
+} else {
+  console.log('sent da ting')
+  bus.sendNoRetailers()
 }
-
-const div = document.createElement('div')
-div.id = 'price-assist'
-document.getElementsByTagName('body')[0].appendChild(div)
-
-Vue.use(Toasted)
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#price-assist',
-  render: h => {
-    return h(Content)
-  }
-})
 
 // Listens to messages from the background script
 port.onMessage.addListener(message => {

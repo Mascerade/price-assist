@@ -8,6 +8,14 @@ export const bus = new Vue({
     sendRetailers (retailerData) {
       this.$emit('newRetailerData', retailerData)
     },
+    // Sent by content.js and received by Retailers Container
+    sendNoRetailers () {
+      this.$emit('noRetailers')
+    },
+    // Sent by Content App and received by Retailers Container
+    sendFoundRetailers () {
+      this.$emit('foundRetailers')
+    },
     // Sent by Footer.vue and received by content.js
     sendSaveProduct () {
       this.$emit('saveProduct')
