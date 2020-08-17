@@ -16,20 +16,23 @@ export default {
   props: ['retailerData'],
   data () {
     return {
-      loadedPrices: false,
-      foundRetailers: false
+      loadedPrices: false, // Variable to control whether we finished the request to the server
+      foundRetailers: false // Variable to control whether we actually found valid retailer prices in the request
     }
   },
   created () {
+    // Sent by content.js if the request to the server was successful
     bus.$on('newRetailerData', retailerData => {
-      console.log('setting loaded prices to true')
       this.loadedPrices = true
     })
+    // Sent by ContentApp.vue if there was actually valid retailer prices
+    // Changes the view to the Retailer Cards
     bus.$on('foundRetailerData', () => {
       this.foundRetailers = true
     })
+    // Sent by content.js if there was no item model on the page
+    // Changes the veiw to the NoRetailerError
     bus.$on('noRetailers', () => {
-      console.log('hereejioerjoiwsjre')
       this.loadedPrices = true
       this.foundRetailers = false
     })

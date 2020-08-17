@@ -110,12 +110,23 @@ function connected (p) {
         portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(networkScrapers.responseText) })
       }
 
+      networkScrapers.onerror = e => {
+        console.log('Unkown error, most likely the server is not running')
+        portFromCS.postMessage({ message: 'unknown error' })
+      }
+
       processScrapers.onload = e => {
         // After getting the process scrapers, send it to the GUI
         console.log('here in process')
         console.log(processScrapers.response)
         portFromCS.postMessage({ message: 'add retailers', data: JSON.parse(processScrapers.responseText) })
       }
+
+      processScrapers.onerror = e => {
+        console.log('Unkown error, most likely the server is not running')
+        portFromCS.postMessage({ message: 'unknown error' })
+      }
+
     } else if (message.message === 'save product') {
       // Make a PUT request that saves the item model to the user's database
       if (currentUser != null) {

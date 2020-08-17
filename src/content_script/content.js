@@ -60,12 +60,16 @@ port.onMessage.addListener(message => {
   } else if (message.message === 'removed product') {
     // Emits 'removedProduct' and received by ContentApp.vue
     bus.sendRemovedProduct()
+  } else if (message.message === 'unknown error') {
+    bus.sendNoRetailers()
   }
 })
 
 // Sent by Footer.vue
 bus.$on('saveProduct', () => {
-  port.postMessage({ message: 'save product', itemModel: retailer.itemModel })
+  if (retailer.itemModel !== null && retailer.itemModel !== '' && retailer.itemModel !== undefined) {
+    port.postMessage({ message: 'save product', itemModel: retailer.itemModel })
+  }
 })
 
 // Sent by Footer.vue

@@ -4,7 +4,7 @@ export const bus = new Vue({
   data: {
   },
   methods: {
-    // Sent by content.js and received by ContentApp.vue
+    // Sent by content.js and received by ContentApp.vue and RetaielrsContainer.vue
     sendRetailers (retailerData) {
       this.$emit('newRetailerData', retailerData)
     },

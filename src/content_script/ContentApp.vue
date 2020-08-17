@@ -43,9 +43,15 @@ export default {
           })
         }
       }
-      if (this.retailerData.length > 1) {
+      if (this.retailerData.length > 0) {
         // Received by Retailers Container
         bus.sendFoundRetailers()
+        this.$toasted
+          .success('Found Products!', {
+            icon: 'add',
+            position: 'bottom-center'
+          })
+          .goAway(1200)
       }
     })
     // Sent by content.js
