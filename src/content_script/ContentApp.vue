@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div v-if="displayGui" id="price-assist-wrapper">
+    <div v-show="displayGui" id="price-assist-wrapper">
       <pa-content-header @hideGui="displayGui=false" />
       <pa-retailers-container :retailerData="retailerData" />
       <pa-footer :productSaved="productSaved" />
     </div>
-    <div @click="showGui" v-else id="show-gui">
+    <div @click="showGui" v-show="!displayGui" id="show-gui">
       <p>P</p>
     </div>
   </div>
