@@ -51,7 +51,7 @@ export default {
             icon: 'add',
             position: 'bottom-center'
           })
-          .goAway(1200)
+          .goAway(2000)
       }
     })
     // Sent by content.js

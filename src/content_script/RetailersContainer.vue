@@ -23,16 +23,19 @@ export default {
   created () {
     // Sent by content.js if the request to the server was successful
     bus.$on('newRetailerData', retailerData => {
+      console.log('got new retailer data')
       this.loadedPrices = true
     })
     // Sent by ContentApp.vue if there was actually valid retailer prices
     // Changes the view to the Retailer Cards
-    bus.$on('foundRetailerData', () => {
+    bus.$on('foundRetailers', () => {
+      console.log('found retailers')
       this.foundRetailers = true
     })
     // Sent by content.js if there was no item model on the page
     // Changes the veiw to the NoRetailerError
     bus.$on('noRetailers', () => {
+      console.log('got sent no retailers')
       this.loadedPrices = true
       this.foundRetailers = false
     })
