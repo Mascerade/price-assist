@@ -122,6 +122,27 @@ export default {
   flex: 1;
 }
 
+#products-container {
+  height: 151px;
+  overflow-y: scroll;
+}
+
+#products-container::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+#products-container::-webkit-scrollbar {
+  width: 5px;
+  background-color: #60dfcd;
+  background-image: linear-gradient(315deg, #60dfcd 0%, #1e9afe 74%);
+}
+
+#products-container::-webkit-scrollbar-thumb {
+  width: 5px;
+  background-color: #60dfcd;
+  background-image: linear-gradient(315deg, #60dfcd 0%, #1e9afe 74%);
+}
+
 #product-list-item {
   display: flex;
   flex-flow: row;
