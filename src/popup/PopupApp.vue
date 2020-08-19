@@ -5,7 +5,7 @@
     :savedProducts="savedProducts" :itemModelToTitle="itemModelToTitle" />
     <div id="notSigned" v-show="!signedIn">
       <div id="google">
-        <img :src="googleImgPath" alt="Gooogle" height="45px" width="45px">
+        <img :src="googleImgPath" alt="Gooogle">
         <p id="sign-in">Sign In</p>
       </div>
       <button @click="signIn" class="btn btn-outline-primary">Sign In!</button>
@@ -87,12 +87,20 @@ export default {
   flex-flow: row;
   align-items: center;
   justify-content: center;
+  margin-bottom: 40px
 }
 
-p {
-  font-size: 19px;
+#google > img {
+  height: 60px;
+  width: 60px;
+  margin-right: 10px;
+}
+
+#google > p {
+  font-size: 25px;
   text-align: center;
   margin: 0;
-  margin-left: 3px;
+  margin-left: 10px;
 }
+
 </style>
