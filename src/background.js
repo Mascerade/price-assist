@@ -7,7 +7,7 @@ import { Profile } from './ProfileInfo'
 // Consts for the different servers
 const localServer = 'localhost'
 const timelessServer = 'timeless-apps.com'
-const piDevServer = '10.0.0.203'
+const piDevServer = '10.0.0.210'
 var currentUser
 const retailerData = {}
 
@@ -201,6 +201,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
   } else if (request.message === 'get profile') {
     // Sends the profile data to the popup
+    checkProductSaved()
     console.log(Profile.getAllData())
     const profile = Profile.getAllData()
     if (profile.signedIn) {
@@ -242,12 +243,14 @@ function checkProductSaved () {
 
             // If the current item model is in the list of item models already saved,
             // change the GUI
-            data.item_models.forEach(itemModel => {
-              console.log(retailerData.itemModel, itemModel)
-              if (retailerData.itemModel === itemModel) {
-                portFromCS.postMessage({ message: 'saved product', onlyToggle: true })
-              }
-            })
+            if (Object.keys(retailerData).length != 0) {
+              data.item_models.forEach(itemModel => {
+                console.log(retailerData.itemModel, itemModel)
+                if (retailerData.itemModel === itemModel) {
+                  portFromCS.postMessage({ message: 'saved product', onlyToggle: true })
+                }
+              })
+            }
 
             // If there was problem getting the data from the user
             // it means that the user does not exist, so we need to make
